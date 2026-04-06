@@ -1,0 +1,128 @@
+.page {
+  padding-bottom: 60px;
+  min-height: 80vh;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 32px;
+  padding-top: 8px;
+}
+
+/* Sidebar */
+.sidebar {
+  position: sticky;
+  top: 160px;
+  align-self: start;
+}
+
+.sidebarTitle {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  color: var(--gray-800);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--primary);
+}
+
+.catList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.catBtn {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 0.88rem;
+  color: var(--gray-600);
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.catBtn:hover {
+  background: var(--gray-50);
+  color: var(--primary);
+}
+
+.catBtnActive {
+  background: var(--primary-50);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Content */
+.contentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.contentTitle {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+}
+
+.count {
+  font-size: 0.85rem;
+  color: var(--gray-500);
+}
+
+.loading, .empty {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--gray-500);
+  font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+  }
+
+  .catList {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 4px;
+    padding-bottom: 8px;
+  }
+
+  .catBtn {
+    white-space: nowrap;
+    padding: 8px 14px;
+    font-size: 0.82rem;
+  }
+
+  .productsGrid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--gray-200);
+}
+
+.pageInfo {
+  font-size: 0.88rem;
+  color: var(--gray-500);
+  font-weight: 500;
+}

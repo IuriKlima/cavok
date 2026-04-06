@@ -1,0 +1,104 @@
+.productCard {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.imageWrap {
+  position: relative;
+  aspect-ratio: 1;
+  background: var(--gray-50);
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 16px;
+  transition: var(--transition);
+}
+
+.productCard:hover .image {
+  transform: scale(1.05);
+}
+
+.badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+}
+
+.badgeDestaque {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.info {
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.category {
+  font-size: 0.75rem;
+  color: var(--primary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+
+.name {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--gray-800);
+  line-height: 1.4;
+  margin-bottom: 4px;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sku {
+  font-size: 0.75rem;
+  color: var(--gray-400);
+  margin-bottom: 12px;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--gray-100);
+}
+
+.price {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.consulte {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.cta {
+  font-size: 0.8rem;
+  color: var(--primary);
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.productCard:hover .cta {
+  color: var(--accent);
+}

@@ -1,0 +1,19 @@
+.dashboard {}
+.page-header { margin-bottom: 28px; }
+.page-header h1 { font-size: 1.6rem; font-weight: 800; color: var(--text); }
+.page-subtitle { color: var(--text-dim); font-size: 0.9rem; margin-top: 4px; }
+
+.stat-card {
+  display: flex; align-items: center; gap: 16px;
+  padding: 24px; border-radius: var(--radius-lg);
+  border: 1px solid var(--border); background: var(--bg-card);
+  transition: var(--transition);
+}
+.stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.stat-icon { font-size: 2rem; }
+.stat-value { display: block; font-size: 2rem; font-weight: 800; color: var(--text); line-height: 1; }
+.stat-label { font-size: 0.8rem; color: var(--text-dim); }
+.stat-primary { border-left: 3px solid var(--primary); }
+.stat-accent { border-left: 3px solid var(--accent); }
+.stat-success { border-left: 3px solid var(--success); }
+.stat-warning { border-left: 3px solid var(--warning); }

@@ -1,0 +1,12 @@
+.import-zone { border: 2px dashed var(--border); border-radius: var(--radius-lg); padding: 40px; text-align: center; transition: var(--transition); }
+.import-zone:hover { border-color: var(--primary); }
+.import-label { display: flex; flex-direction: column; align-items: center; gap: 12px; cursor: pointer; }
+.import-icon { font-size: 3rem; }
+.import-text { font-size: 1rem; font-weight: 600; color: var(--text); }
+.import-hint { font-size: 0.82rem; color: var(--text-dim); }
+.import-result { margin-top: 24px; padding: 24px; background: var(--success-bg); border-radius: var(--radius); }
+.import-result h3 { font-size: 1.1rem; color: var(--success); margin-bottom: 16px; }
+.result-stats { display: flex; gap: 32px; }
+.result-stat { display: flex; flex-direction: column; align-items: center; }
+.result-value { font-size: 2rem; font-weight: 800; color: var(--text); }
+.result-stat span:last-child { font-size: 0.82rem; color: var(--text-muted); }

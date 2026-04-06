@@ -1,0 +1,31 @@
+# dependencias
+node_modules/
+.next/
+dist/
+build/
+.venv/
+__pycache__/
+*.pyc
+
+# DB sqlite e dados locais temporarios
+*.db
+*.sqlite3
+
+# Env
+.env
+.env.local
+
+# Logs
+*.log
+tunnel.log
+*.tmp
+frontend.log
+frontend_prod.log
+admin.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+uploads/

@@ -1,0 +1,261 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Top Bar */
+.topBar {
+  background: var(--primary);
+  color: var(--white);
+  font-size: 0.85rem;
+}
+
+.topBarInner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 20px;
+}
+
+.topLinks {
+  display: flex;
+  gap: 4px;
+}
+
+.topLinkActive {
+  background: rgba(255,255,255,0.15);
+  padding: 6px 18px;
+  border-radius: 100px;
+  color: var(--white);
+  font-weight: 600;
+  font-size: 0.8rem;
+  transition: var(--transition);
+}
+
+.topLinkActive:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+.topLinkAccent {
+  background: var(--accent);
+  padding: 6px 18px;
+  border-radius: 100px;
+  color: var(--white);
+  font-weight: 600;
+  font-size: 0.8rem;
+  transition: var(--transition);
+}
+
+.topLinkAccent:hover {
+  background: var(--accent-dark);
+}
+
+.topContact {
+  display: flex;
+  gap: 24px;
+}
+
+.topContact a {
+  color: rgba(255,255,255,0.9);
+  transition: var(--transition);
+}
+
+.topContact a:hover {
+  color: var(--white);
+}
+
+/* Main Header */
+.mainHeader {
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.mainHeaderInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  gap: 32px;
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.logoIcon {
+  display: flex;
+}
+
+.logoText {
+  display: flex;
+  flex-direction: column;
+}
+
+.logoName {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1;
+  letter-spacing: 0.08em;
+}
+
+.logoSub {
+  font-size: 0.65rem;
+  color: var(--gray-400);
+  letter-spacing: 0.25em;
+  font-weight: 600;
+}
+
+/* Search */
+.searchBar {
+  flex: 1;
+  max-width: 600px;
+  display: flex;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.searchBar:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-50);
+}
+
+.searchInput {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
+}
+
+.searchBtn {
+  padding: 12px 20px;
+  background: var(--primary);
+  color: var(--white);
+  font-size: 1.1rem;
+  transition: var(--transition);
+}
+
+.searchBtn:hover {
+  background: var(--primary-dark);
+}
+
+/* Mobile Menu Btn */
+.mobileMenuBtn {
+  display: none;
+  font-size: 1.5rem;
+  color: var(--gray-700);
+  padding: 8px;
+}
+
+/* Categories Nav */
+.catNav {
+  background: var(--primary-light);
+}
+
+.catNavInner {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 20px;
+}
+
+.catLink {
+  color: var(--white);
+  padding: 14px 20px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: var(--transition);
+  position: relative;
+}
+
+.catLink:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.catLink::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: var(--transition);
+}
+
+.catLink:hover::after {
+  transform: scaleX(1);
+}
+
+/* Dropdown */
+.catDropdown {
+  position: relative;
+}
+
+.catDropdownMenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  min-width: 220px;
+  padding: 8px 0;
+  z-index: 9999;
+}
+
+.catDropdown:hover .catDropdownMenu {
+  display: block;
+}
+
+.catDropdownMenu a {
+  display: block;
+  padding: 10px 20px;
+  color: var(--gray-700);
+  font-size: 0.88rem;
+  transition: var(--transition);
+}
+
+.catDropdownMenu a:hover {
+  background: var(--primary-50);
+  color: var(--primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .topContact { display: none; }
+  .mobileMenuBtn { display: block; }
+  .searchBar { max-width: 100%; order: 3; }
+  .mainHeaderInner { flex-wrap: wrap; }
+  
+  .catNav {
+    display: none;
+  }
+  
+  .catNavOpen {
+    display: block;
+  }
+  
+  .catNavInner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .catLink {
+    padding: 12px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+}

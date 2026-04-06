@@ -1,0 +1,81 @@
+# SOFTACULOUS Block author scans
+RewriteEngine On
+RewriteBase /
+RewriteCond %{QUERY_STRING} (author=\d+) [NC,OR]
+RewriteCond %{REQUEST_URI} ^.*wp-json/wp/v2/users(?!/me) [NC]
+RewriteRule .* - [F,L]
+# SOFTACULOUS Block author scans End
+
+# BEGIN Secure Core File Blocker
+<Files wp-config.php>
+    order allow,deny
+    deny from all
+</Files>
+<Files .htaccess>
+    order allow,deny
+    deny from all
+</Files>
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^wp-admin/includes/ - [F,L]
+    RewriteRule !^wp-includes/.*\.php$ - [S=3]
+    RewriteRule ^wp-includes/[^/]+\.php$ - [F,L]
+    RewriteRule ^wp-includes/js/tinymce/langs/.+\.php - [F,L]
+    RewriteRule ^wp-includes/theme-compat/ - [F,L]
+</IfModule>
+# END Secure Core File Blocker
+
+DirectoryIndex index.php index.html
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+# SOFTACULOUS Block xmlrpc
+<files xmlrpc.php>
+	Require all denied
+</files>
+# SOFTACULOUS Block xmlrpc End
+
+# SOFTACULOUS Block .htaccess and .htpasswd
+<FilesMatch ^(?i:\.ht.*)$>
+	Require all denied
+</FilesMatch>
+# SOFTACULOUS Block .htaccess and .htpasswd End
+
+
+# SOFTACULOUS Block directory browsing
+Options -Indexes
+# SOFTACULOUS Block directory browsing End
+
+# SOFTACULOUS Block access sensitive files
+<FilesMatch "^.*(((?:wp-config)\.(?:php|bak|swp))|php.ini|\.[hH][tT][aApP].*|((?:error_log|readme|license|changelog|-config|-sample)\.(?:php|md|log|txt|htm|html)))$">
+	Require all denied
+</FilesMatch>
+# SOFTACULOUS Block access sensitive files End
+
+# SOFTACULOUS Enable bot protection
+RewriteEngine on
+RewriteCond %{HTTP_USER_AGENT} (?:virusbot|spambot|evilbot|acunetix|BLEXBot|domaincrawler\.com|LinkpadBot|MJ12bot/v|majestic12\.co\.uk|AhrefsBot|TwengaBot|SemrushBot|nikto|winhttp|Xenu\s+Link\s+Sleuth|Baiduspider|HTTrack|clshttp|harvest|extract|grab|miner|python-requests) [NC]
+RewriteRule ^(.*)$ http://no.access/
+# SOFTACULOUS Enable bot protection End
+
+# BEGIN WordPress
+# As diretrizes (linhas) entre "BEGIN WordPress" e "END WordPress" são
+# geradas dinamicamente e só devem ser modificadas através de filtros do WordPress.
+# Quaisquer alterações nas diretivas entre esses marcadores serão sobrescritas.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+
+# END WordPress

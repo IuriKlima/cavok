@@ -1,0 +1,42 @@
+[23-Mar-2026 13:30:06 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function PHPMailer\PHPMailer\mail() in /home/ceod9251/cavokavionics.com.br/wp-includes/PHPMailer/PHPMailer.php:892
+Stack trace:
+#0 /home/ceod9251/cavokavionics.com.br/wp-includes/PHPMailer/PHPMailer.php(2083): PHPMailer\PHPMailer\PHPMailer->mailPassthru()
+#1 /home/ceod9251/cavokavionics.com.br/wp-includes/PHPMailer/PHPMailer.php(1800): PHPMailer\PHPMailer\PHPMailer->mailSend()
+#2 /home/ceod9251/cavokavionics.com.br/wp-includes/PHPMailer/PHPMailer.php(1615): PHPMailer\PHPMailer\PHPMailer->postSend()
+#3 /home/ceod9251/cavokavionics.com.br/wp-includes/pluggable.php(625): PHPMailer\PHPMailer\PHPMailer->send()
+#4 /home/ceod9251/cavokavionics.com.br/wp-content/plugins/pro-elements/modules/forms/actions/email.php(422): wp_mail()
+#5 /home/ceod9251/cavokavionics.com.br/wp-content/plugins/pro-elements/modules/forms/classes/ajax-handler.php(159): ElementorPro\Modules\Forms\Actions\Email->run()
+#6 /home/ceod9251/cavokavionics.com.br/wp-includes/class-wp-hook.php(341): ElementorPro\Modules\Forms\Classes\Ajax_Handler->ajax_send_form()
+#7 /home/ceod9251/cavokavionics.com.br/wp-includes/class-wp-hook.php(365): WP_Hook->apply_filters()
+#8 /home/ceod9251/cavokavionics.com.br/wp-includes/plugin.php(522): WP_Hook->do_action()
+#9 /home/ceod9251/cavokavionics.com.br/wp-admin/admin-ajax.php(207): do_action()
+#10 {main}
+  thrown in /home/ceod9251/cavokavionics.com.br/wp-includes/PHPMailer/PHPMailer.php on line 892
+[23-Mar-2026 13:30:09 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function PHPMailer\PHPMailer\mail() in /home/ceod9251/cavokavionics.com.br/wp-includes/PHPMailer/PHPMailer.php:892
+Stack trace:
+#0 /home/ceod9251/cavokavionics.com.br/wp-includes/PHPMailer/PHPMailer.php(2083): PHPMailer\PHPMailer\PHPMailer->mailPassthru()
+#1 /home/ceod9251/cavokavionics.com.br/wp-includes/PHPMailer/PHPMailer.php(1800): PHPMailer\PHPMailer\PHPMailer->mailSend()
+#2 /home/ceod9251/cavokavionics.com.br/wp-includes/PHPMailer/PHPMailer.php(1615): PHPMailer\PHPMailer\PHPMailer->postSend()
+#3 /home/ceod9251/cavokavionics.com.br/wp-includes/pluggable.php(625): PHPMailer\PHPMailer\PHPMailer->send()
+#4 /home/ceod9251/cavokavionics.com.br/wp-content/plugins/pro-elements/modules/forms/actions/email.php(422): wp_mail()
+#5 /home/ceod9251/cavokavionics.com.br/wp-content/plugins/pro-elements/modules/forms/classes/ajax-handler.php(159): ElementorPro\Modules\Forms\Actions\Email->run()
+#6 /home/ceod9251/cavokavionics.com.br/wp-includes/class-wp-hook.php(341): ElementorPro\Modules\Forms\Classes\Ajax_Handler->ajax_send_form()
+#7 /home/ceod9251/cavokavionics.com.br/wp-includes/class-wp-hook.php(365): WP_Hook->apply_filters()
+#8 /home/ceod9251/cavokavionics.com.br/wp-includes/plugin.php(522): WP_Hook->do_action()
+#9 /home/ceod9251/cavokavionics.com.br/wp-admin/admin-ajax.php(207): do_action()
+#10 {main}
+  thrown in /home/ceod9251/cavokavionics.com.br/wp-includes/PHPMailer/PHPMailer.php on line 892
+[23-Mar-2026 13:30:17 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function PHPMailer\PHPMailer\mail() in /home/ceod9251/cavokavionics.com.br/wp-includes/PHPMailer/PHPMailer.php:892
+Stack trace:
+#0 /home/ceod9251/cavokavionics.com.br/wp-includes/PHPMailer/PHPMailer.php(2083): PHPMailer\PHPMailer\PHPMailer->mailPassthru()
+#1 /home/ceod9251/cavokavionics.com.br/wp-includes/PHPMailer/PHPMailer.php(1800): PHPMailer\PHPMailer\PHPMailer->mailSend()
+#2 /home/ceod9251/cavokavionics.com.br/wp-includes/PHPMailer/PHPMailer.php(1615): PHPMailer\PHPMailer\PHPMailer->postSend()
+#3 /home/ceod9251/cavokavionics.com.br/wp-includes/pluggable.php(625): PHPMailer\PHPMailer\PHPMailer->send()
+#4 /home/ceod9251/cavokavionics.com.br/wp-content/plugins/pro-elements/modules/forms/actions/email.php(422): wp_mail()
+#5 /home/ceod9251/cavokavionics.com.br/wp-content/plugins/pro-elements/modules/forms/classes/ajax-handler.php(159): ElementorPro\Modules\Forms\Actions\Email->run()
+#6 /home/ceod9251/cavokavionics.com.br/wp-includes/class-wp-hook.php(341): ElementorPro\Modules\Forms\Classes\Ajax_Handler->ajax_send_form()
+#7 /home/ceod9251/cavokavionics.com.br/wp-includes/class-wp-hook.php(365): WP_Hook->apply_filters()
+#8 /home/ceod9251/cavokavionics.com.br/wp-includes/plugin.php(522): WP_Hook->do_action()
+#9 /home/ceod9251/cavokavionics.com.br/wp-admin/admin-ajax.php(207): do_action()
+#10 {main}
+  thrown in /home/ceod9251/cavokavionics.com.br/wp-includes/PHPMailer/PHPMailer.php on line 892

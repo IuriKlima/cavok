@@ -1,0 +1,115 @@
+.footer {
+  background: var(--gray-900);
+  color: var(--gray-300);
+  padding-top: 60px;
+}
+
+.footerGrid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 40px;
+}
+
+.footerLogo {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.logoName {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+.logoSub {
+  font-size: 0.6rem;
+  color: var(--gray-500);
+  letter-spacing: 0.25em;
+  font-weight: 600;
+}
+
+.footerDesc {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--gray-400);
+}
+
+.footerTitle {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 20px;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.footerTitle::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.footerNav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footerNav a {
+  font-size: 0.9rem;
+  color: var(--gray-400);
+  transition: var(--transition);
+}
+
+.footerNav a:hover {
+  color: var(--white);
+  padding-left: 4px;
+}
+
+.contactInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contactInfo a {
+  font-size: 0.9rem;
+  color: var(--gray-400);
+  transition: var(--transition);
+}
+
+.contactInfo a:hover {
+  color: var(--accent);
+}
+
+.footerBottom {
+  border-top: 1px solid var(--gray-800);
+  padding: 20px 0;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--gray-500);
+}
+
+@media (max-width: 768px) {
+  .footerGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footerGrid {
+    grid-template-columns: 1fr;
+  }
+}

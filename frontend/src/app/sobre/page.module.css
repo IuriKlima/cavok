@@ -1,0 +1,16 @@
+.page { padding-bottom: 60px; }
+.hero { background: linear-gradient(135deg, var(--navy), #0d3a6e); padding: 60px 0; color: #fff; }
+.heroTitle { font-size: 2rem; font-weight: 800; margin-bottom: 8px; }
+.heroDesc { opacity: 0.8; font-size: 1rem; }
+.content { padding-top: 40px; }
+.textBlock { font-size: 1.05rem; line-height: 1.8; color: var(--gray-600); max-width: 700px; margin-bottom: 40px; }
+.values { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 48px; }
+.valueCard { padding: 28px; background: var(--gray-50); border-radius: 12px; border: 1px solid var(--gray-200); text-align: center; }
+.valueIcon { font-size: 2.5rem; display: block; margin-bottom: 12px; }
+.valueCard h3 { font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.valueCard p { font-size: 0.88rem; color: var(--gray-500); line-height: 1.6; }
+.contact { text-align: center; padding: 40px; background: var(--gray-50); border-radius: 12px; }
+.contact h2 { font-size: 1.4rem; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
+.contact p { color: var(--gray-500); margin-bottom: 20px; }
+.contactLinks { display: flex; gap: 12px; justify-content: center; }
+@media (max-width: 768px) { .values { grid-template-columns: 1fr; } .contactLinks { flex-direction: column; align-items: center; } }
