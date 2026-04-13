@@ -9,11 +9,9 @@ const fullMenu = [
   { path: '/aeronaves', icon: <Plane size={20}/>, label: 'Aeronaves' },
   { path: '/categorias', icon: <FolderTree size={20}/>, label: 'Categorias' },
   { path: '/slides', icon: <Image size={20}/>, label: 'Slides' },
-  { path: '/paginas', icon: <FileText size={20}/>, label: 'Páginas' },
   { path: '/contatos', icon: <MessageSquare size={20}/>, label: 'Contatos' },
   { path: '/configuracoes-avionicos', icon: <Settings size={20}/>, label: 'Config. Globais' },
   { path: '/configuracoes-aeronaves', icon: <Settings size={20}/>, label: 'Config. Aeronaves' },
-  { path: '/importar', icon: <Download size={20}/>, label: 'Importar XML' },
 ];
 
 const aeronavesMenu = [

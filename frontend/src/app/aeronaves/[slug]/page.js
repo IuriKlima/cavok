@@ -38,7 +38,7 @@ export default function AeronaveDetalhe() {
       return;
     }
 
-    const whatsappNumber = config?.whatsapp || '5519983296170';
+    const whatsappNumber = config?.aeronaves_whatsapp || config?.whatsapp || '5519983296170';
     let message = `Olá! Meu nome é *${formData.nome}* (${formData.email}) e tenho interesse na aeronave: *${aeronave.nome}*`;
     if (aeronave.preco) {
       message += ` anunciada por R$ ${Number(aeronave.preco).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
