@@ -50,10 +50,10 @@ export default function Dashboard() {
           <h3 style={{ marginBottom: 16, fontSize: '1rem', fontWeight: 700 }}>Informações do Sistema</h3>
           <table style={{ width: '100%' }}>
             <tbody>
-              <tr><td style={{ color: 'var(--text-dim)' }}>Backend</td><td>Python FastAPI</td></tr>
+              <tr><td style={{ color: 'var(--text-dim)' }}>Backend</td><td>Supabase (Serverless)</td></tr>
               <tr><td style={{ color: 'var(--text-dim)' }}>Frontend</td><td>Next.js 16</td></tr>
               <tr><td style={{ color: 'var(--text-dim)' }}>Admin</td><td>React + Vite</td></tr>
-              <tr><td style={{ color: 'var(--text-dim)' }}>Banco de dados</td><td>SQLite</td></tr>
+              <tr><td style={{ color: 'var(--text-dim)' }}>Banco de dados</td><td>PostgreSQL</td></tr>
               <tr><td style={{ color: 'var(--text-dim)' }}>Status</td><td><span className="badge badge-success">Online</span></td></tr>
             </tbody>
           </table>

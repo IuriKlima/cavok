@@ -102,7 +102,14 @@ function aeronaveFromSnake(data) {
 export const getDashboard = async () => {
     const p = await supabase.from('produtos').select('id', { count: 'exact' });
     const a = await supabase.from('aeronaves').select('id', { count: 'exact' });
-    return { countProdutos: p.count, countAeronaves: a.count };
+    const c = await supabase.from('categorias').select('id', { count: 'exact' });
+    const msg = await supabase.from('contatos').select('id', { count: 'exact' }).eq('lido', false);
+    return { 
+      totalProdutos: p.count || 0, 
+      totalAeronaves: a.count || 0,
+      totalCategorias: c.count || 0,
+      contatosNaoLidos: msg.count || 0
+    };
 };
 
 function formatPagination(data, count) {
