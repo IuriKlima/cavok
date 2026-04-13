@@ -53,21 +53,33 @@ export default function HeroSlider({ slides = [], config = {} }) {
 
   return (
     <section className={styles.hero}>
-      {slides.map((slide, i) => (
-        <div key={slide.id || i} className={`${styles.slide} ${i === current ? styles.slideActive : ''}`}
-          style={{ backgroundImage: (slide.imagem_url || slide.imagemUrl) ? `url(${slide.imagem_url || slide.imagemUrl})` : undefined }}>
-          <div className={styles.overlay} />
-          <div className={`container ${styles.content}`}>
-            {slide.titulo && <h1 className={styles.title}>{slide.titulo}</h1>}
-            {slide.subtitulo && <p className={styles.subtitle}>{slide.subtitulo}</p>}
-            {slide.link && (
-              <div className={styles.actions}>
-                <Link href={slide.link} className="btn btn-accent btn-lg">{slide.texto_botao || slide.textoBotao || 'Ver Mais'}</Link>
-              </div>
-            )}
-          </div>
-        </div>
-      ))}
+      {slides.map((slide, i) => {
+        const slideStyle = { backgroundImage: (slide.imagem_url || slide.imagemUrl) ? `url(${slide.imagem_url || slide.imagemUrl})` : undefined };
+        const slideClass = `${styles.slide} ${i === current ? styles.slideActive : ''}`;
+        const buttonText = slide.texto_botao || slide.textoBotao;
+        const hasBtnText = buttonText && buttonText.trim().length > 0;
+        
+        const content = (
+          <>
+            <div className={styles.overlay} />
+            <div className={`container ${styles.content}`}>
+              {slide.titulo && <h1 className={styles.title}>{slide.titulo}</h1>}
+              {slide.subtitulo && <p className={styles.subtitle}>{slide.subtitulo}</p>}
+              {(slide.link && hasBtnText) && (
+                <div className={styles.actions}>
+                  <Link href={slide.link} className="btn btn-accent btn-lg">{buttonText}</Link>
+                </div>
+              )}
+            </div>
+          </>
+        );
+
+        if (slide.link && !hasBtnText) {
+          return <Link key={slide.id || i} href={slide.link} className={slideClass} style={{...slideStyle, display: 'block'}}>{content}</Link>;
+        }
+
+        return <div key={slide.id || i} className={slideClass} style={slideStyle}>{content}</div>;
+      })}
 
       {slides.length > 1 && (
         <>
