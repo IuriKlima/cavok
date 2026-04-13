@@ -33,11 +33,13 @@ export const login = async (email, senha) => {
 // Mapeamento camelCase <-> snake_case
 // =============================================
 
+export const generateSlug = (text) => text ? text.toString().toLowerCase().trim().replace(/[\s\W-]+/g, '-').replace(/^-+|-+$/g, '') : undefined;
+
 // Converte payload do form (camelCase) para colunas do Supabase (snake_case)
 function produtoToSnake(form) {
   return {
     nome: form.nome,
-    slug: form.slug || undefined,
+    slug: form.slug ? generateSlug(form.slug) : generateSlug(form.nome),
     sku: form.sku || null,
     descricao: form.descricao || null,
     descricao_curta: form.descricaoCurta || null,
@@ -69,7 +71,7 @@ function produtoFromSnake(data) {
 function aeronaveToSnake(form) {
   return {
     nome: form.nome,
-    slug: form.slug || undefined,
+    slug: form.slug ? generateSlug(form.slug) : generateSlug(form.nome),
     descricao: form.descricao || null,
     assentos: form.assentos || null,
     horas_celula: form.horasCelula || null,
