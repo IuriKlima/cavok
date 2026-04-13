@@ -103,3 +103,4 @@ export const getPaginas = async () => ({ content: [], totalElements: 0, totalPag
 export const criarPagina = async () => {};
 export const atualizarPagina = async () => {};
 export const deletarPagina = async () => {};
+export const importarXml = async () => {};
