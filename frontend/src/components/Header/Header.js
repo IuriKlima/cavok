@@ -58,18 +58,10 @@ export default function Header() {
             {logoSrc ? (
               <img src={logoSrc} alt={config.site_nome || 'Cavok Avionics'} className={styles.logoImg} />
             ) : (
-              <>
-                <div className={styles.logoIcon}>
-                  <svg width="40" height="32" viewBox="0 0 40 32" fill="none">
-                    <path d="M20 0L40 24H30L20 12L10 24H0L20 0Z" fill="var(--accent)"/>
-                    <path d="M10 28H30V32H10V28Z" fill="var(--primary)"/>
-                  </svg>
-                </div>
-                <div className={styles.logoText}>
-                  <span className={styles.logoName}>CAVOK</span>
-                  <span className={styles.logoSub}>{isAeronaves ? 'AERONAVES' : 'AVIONICS'}</span>
-                </div>
-              </>
+              <div className={styles.logoText}>
+                <span className={styles.logoName}>CAVOK</span>
+                <span className={styles.logoSub}>{isAeronaves ? 'AERONAVES' : 'AVIONICS'}</span>
+              </div>
             )}
           </Link>
 

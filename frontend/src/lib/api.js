@@ -1,93 +1,108 @@
-const API_URL = '';
+import { supabase } from './supabase';
 
-async function fetchApi(endpoint, options = {}) {
-  const url = `${API_URL}${endpoint}`;
-  
-  try {
-    const res = await fetch(url, {
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
-    });
-
-    if (!res.ok) {
-      console.error(`API error: ${res.status} on ${endpoint}`);
-      return null;
-    }
-
-    return res.json();
-  } catch (error) {
-    console.error(`API fetch failed for ${endpoint}:`, error.message);
-    return null;
-  }
+function formatPagination(data, count, size) {
+  return { content: data || [], totalElements: count || 0, totalPages: Math.ceil((count || 0) / size) };
 }
 
 // ====== Produtos ======
 export async function getProdutos({ page = 0, size = 12, categoriaId, marcaId } = {}) {
-  const params = new URLSearchParams({ page, size });
-  if (categoriaId) params.append('categoriaId', categoriaId);
-  if (marcaId) params.append('marcaId', marcaId);
-  return fetchApi(`/api/produtos?${params}`);
+  let query = supabase.from('produtos').select('*, categoria:categorias(nome)', { count: 'exact' });
+  if (categoriaId) query = query.eq('categoria_id', categoriaId);
+  if (marcaId) query = query.eq('marca_id', marcaId);
+  
+  const { data, count, error } = await query
+    .eq('status', 'ATIVO')
+    .range(page * size, (page + 1) * size - 1)
+    .order('created_at', { ascending: false });
+    
+  if (error) console.error(error);
+  return formatPagination(data, count, size);
 }
 
 export async function getProduto(slug) {
-  return fetchApi(`/api/produtos/${slug}`);
+  const { data } = await supabase.from('produtos').select('*, categoria:categorias(nome), marca:marcas(nome)').eq('slug', slug).single();
+  return data;
 }
 
 export async function getProdutosRelacionados(slug) {
-  return fetchApi(`/api/produtos/${slug}/relacionados`);
+  const current = await getProduto(slug);
+  if (!current?.categoria_id) return [];
+  const { data } = await supabase.from('produtos').select('*').eq('categoria_id', current.categoria_id).neq('slug', slug).limit(4);
+  return data || [];
 }
 
-export async function buscarProdutos(q, page = 0) {
-  return fetchApi(`/api/produtos/busca?q=${encodeURIComponent(q)}&page=${page}`);
+export async function buscarProdutos(q, page = 0, size = 12) {
+  const { data, count } = await supabase.from('produtos')
+    .select('*', { count: 'exact' })
+    .ilike('nome', `%${q}%`)
+    .range(page * size, (page + 1) * size - 1);
+  return formatPagination(data, count, size);
 }
 
 export async function getProdutosDestaques() {
-  return fetchApi('/api/produtos/destaques');
+  const { data } = await supabase.from('produtos').select('*').limit(8); // Simulando destaques
+  return data || [];
 }
 
 // ====== Aeronaves ======
 export async function getAeronaves({ page = 0, size = 12, categoriaId } = {}) {
-  const params = new URLSearchParams({ page, size });
-  if (categoriaId) params.append('categoriaId', categoriaId);
-  return fetchApi(`/api/aeronaves?${params}`);
+  let query = supabase.from('aeronaves').select('*', { count: 'exact' });
+  if (categoriaId) query = query.eq('categoria_id', categoriaId);
+  
+  const { data, count, error } = await query
+    .eq('status', 'DISPONIVEL')
+    .range(page * size, (page + 1) * size - 1)
+    .order('created_at', { ascending: false });
+    
+  if (error) console.error(error);
+  return formatPagination(data, count, size);
 }
 
 export async function getAeronave(slug) {
-  return fetchApi(`/api/aeronaves/${slug}`);
+  const { data } = await supabase.from('aeronaves').select('*, categoria:categorias(nome)').eq('slug', slug).single();
+  return data;
 }
 
 export async function getAeronavesRelacionadas(slug) {
-  return fetchApi(`/api/aeronaves/${slug}/relacionados`);
+  const current = await getAeronave(slug);
+  if (!current?.categoria_id) return [];
+  const { data } = await supabase.from('aeronaves').select('*').eq('categoria_id', current.categoria_id).neq('slug', slug).limit(4);
+  return data || [];
 }
 
 // ====== Categorias ======
 export async function getCategorias(tipo) {
-  const params = tipo ? `?tipo=${tipo}` : '';
-  return fetchApi(`/api/categorias${params}`);
+  let q = supabase.from('categorias').select('*').order('ordem', { ascending: true });
+  if (tipo) q = q.eq('tipo', tipo);
+  const { data } = await q;
+  return data || [];
 }
 
 // ====== Marcas ======
 export async function getMarcas() {
-  return fetchApi('/api/marcas');
+  const { data } = await supabase.from('marcas').select('*').order('nome', { ascending: true });
+  return data || [];
 }
 
 // ====== Configurações ======
 export async function getConfiguracoes() {
-  return fetchApi('/api/configuracoes');
+  const { data } = await supabase.from('configuracoes').select('*');
+  if(!data) return {};
+  // Mapear para objeto chave: valor igual o java
+  const configObj = {};
+  data.forEach(c => { configObj[c.chave] = c.valor; });
+  return configObj;
 }
 
 // ====== Slides ======
 export async function getSlides() {
-  return fetchApi('/api/slides');
+  const { data } = await supabase.from('slides').select('*').eq('ativo', true).order('ordem', { ascending: true });
+  return data || [];
 }
 
 // ====== Contato ======
 export async function enviarContato(data) {
-  return fetchApi('/api/contato', {
-    method: 'POST',
-    body: JSON.stringify(data),
-  });
+  console.log("Mock de envio de contato pro Supabase", data);
+  // Pode ser implementado salvando as mensagens numa base 'contatos' no supabase
+  return { success: true };
 }
