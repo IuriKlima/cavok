@@ -23,7 +23,7 @@ export default function OrcamentoPage() {
   };
   const sumAmount = calculateTotal();
 
-  const handleSendToWhatsApp = (e) => {
+  const handleSendToWhatsApp = async (e) => {
     e.preventDefault();
     if (!formData.nome || !formData.email) {
       alert('Por favor, preencha nome e email.');

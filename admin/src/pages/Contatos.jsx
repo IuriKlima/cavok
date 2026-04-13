@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getContatos, marcarContatoLido, deletarContato } from '../api';
 import { useAuth } from '../context/AuthContext';
-import { Trash2, CheckCircle, Mail, Airplane, FileText } from 'lucide-react';
+import { Trash2, CheckCircle, Mail, Plane, FileText } from 'lucide-react';
 import './Crud.css';
 
 export default function Contatos() {
