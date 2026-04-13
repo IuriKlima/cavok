@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, ShoppingCart, Plane, FolderTree, FileText, MessageSquare, Settings, Download, LogOut, Image } from 'lucide-react';
+import { LayoutDashboard, ShoppingCart, Plane, FolderTree, FileText, MessageSquare, Settings, Download, LogOut, Image, HelpCircle } from 'lucide-react';
 import './Sidebar.css';
 
 const fullMenu = [
@@ -12,6 +12,7 @@ const fullMenu = [
   { path: '/contatos', icon: <MessageSquare size={20}/>, label: 'Contatos' },
   { path: '/configuracoes-avionicos', icon: <Settings size={20}/>, label: 'Config. Globais' },
   { path: '/configuracoes-aeronaves', icon: <Settings size={20}/>, label: 'Config. Aeronaves' },
+  { path: '/ajuda', icon: <HelpCircle size={20}/>, label: 'Ajuda' },
 ];
 
 const aeronavesMenu = [
@@ -19,6 +20,7 @@ const aeronavesMenu = [
   { path: '/aeronaves', icon: <Plane size={20}/>, label: 'Aeronaves' },
   { path: '/contatos', icon: <MessageSquare size={20}/>, label: 'Contatos' },
   { path: '/configuracoes-aeronaves', icon: <Settings size={20}/>, label: 'Configurações' },
+  { path: '/ajuda', icon: <HelpCircle size={20}/>, label: 'Ajuda' },
 ];
 
 export default function Sidebar() {

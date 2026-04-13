@@ -14,6 +14,7 @@ import ConfiguracoesAvionicos from './pages/ConfiguracoesAvionicos';
 import ConfiguracoesAeronaves from './pages/ConfiguracoesAeronaves';
 import ImportXml from './pages/ImportXml';
 import Slides from './pages/Slides';
+import Ajuda from './pages/Ajuda';
 
 export default function App() {
   return (
@@ -36,6 +37,7 @@ export default function App() {
             <Route path="/configuracoes-aeronaves" element={<ConfiguracoesAeronaves />} />
             <Route path="/slides" element={<Slides />} />
             <Route path="/importar" element={<ImportXml />} />
+            <Route path="/ajuda" element={<Ajuda />} />
           </Route>
         </Routes>
       </BrowserRouter>

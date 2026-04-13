@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { getProduto, getProdutosRelacionados } from '@/lib/api';
+import { sanitizeHtml } from '@/lib/sanitize';
 import { useCart } from '@/context/CartContext';
 import ProductCard from '@/components/ProductCard/ProductCard';
 import { Camera, CheckCircle, ShoppingCart, Check, Mail, ShieldCheck, Truck, Wrench } from 'lucide-react';
@@ -110,7 +111,7 @@ export default function ProdutoDetalhe() {
         {produto.descricao && (
           <div className={styles.descSection}>
             <h2 className={styles.descTitle}>Descrição do Produto</h2>
-            <div className={styles.descContent} dangerouslySetInnerHTML={{ __html: produto.descricao }} />
+            <div className={styles.descContent} dangerouslySetInnerHTML={{ __html: sanitizeHtml(produto.descricao) }} />
           </div>
         )}
 

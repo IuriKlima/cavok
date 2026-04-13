@@ -19,8 +19,27 @@ export default function ConfiguracoesAvionicos() {
   };
 
   useEffect(() => {
-    getConfiguracoes().then(data => {
-      if (data) setConfigs(data.map(c => ({ ...c, valor: c.valor || '' })));
+    getConfiguracoes().then(async (data) => {
+      const allData = (data || []).map(c => ({ ...c, valor: c.valor || '' }));
+      const existingKeys = allData.map(c => c.chave);
+
+      // Criar automaticamente as chaves que não existem no banco
+      const myKeys = Object.keys(labels);
+      const missing = myKeys.filter(k => !existingKeys.includes(k));
+      if (missing.length > 0) {
+        const payload = missing.map(chave => ({
+          chave,
+          valor: '',
+          tipo: ['logo_avionicos', 'logo_aeronaves'].includes(chave) ? 'image'
+            : ['sobre_texto', 'contato_texto'].includes(chave) ? 'textarea' : 'text'
+        }));
+        try {
+          const created = await atualizarConfiguracoes(payload);
+          if (created) allData.push(...created.map(c => ({ ...c, valor: c.valor || '' })));
+        } catch (e) { console.error('Erro ao criar configs:', e); }
+      }
+
+      setConfigs(allData);
       setLoading(false);
     }).catch(() => setLoading(false));
   }, []);

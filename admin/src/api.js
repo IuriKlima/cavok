@@ -2,7 +2,7 @@ import { supabase } from './supabase';
 
 export function getToken() {
   const session = supabase.auth.getSession();
-  return session?.access_token || localStorage.getItem('sb-ynpzkzkypusjxwdfpaxv-auth-token');
+  return session?.access_token || null;
 }
 
 export function removeToken() {
@@ -175,12 +175,22 @@ export const deletarAeronave = async (id) => await supabase.from('aeronaves').de
 export const getCategorias = async (tipo) => {
   let q = supabase.from('categorias').select('*');
   if (tipo) q = q.eq('tipo', tipo);
-  const { data } = await q;
+  const { data, error } = await q;
+  if (error) throw new Error(error.message);
   return data;
 };
-export const criarCategoria = async (data) => await supabase.from('categorias').insert(data);
-export const atualizarCategoria = async (id, data) => await supabase.from('categorias').update(data).eq('id', id);
-export const deletarCategoria = async (id) => await supabase.from('categorias').delete().eq('id', id);
+export const criarCategoria = async (payload) => {
+  const { error } = await supabase.from('categorias').insert(payload);
+  if (error) throw new Error(error.message);
+};
+export const atualizarCategoria = async (id, payload) => {
+  const { error } = await supabase.from('categorias').update(payload).eq('id', id);
+  if (error) throw new Error(error.message);
+};
+export const deletarCategoria = async (id) => {
+  const { error } = await supabase.from('categorias').delete().eq('id', id);
+  if (error) throw new Error(error.message);
+};
 
 // Configurações e slides
 export const getConfiguracoes = async () => (await supabase.from('configuracoes').select('*')).data;
@@ -212,10 +222,24 @@ export const deletarSlide = async (id) => {
 };
 
 // Uploads Supabase Storage Native File
+const ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg'];
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
 export const uploadFiles = async (files) => {
   const urls = [];
   for (const file of files) {
-      const fileName = Date.now() + '_' + file.name;
+      // Validação de tamanho
+      if (file.size > MAX_FILE_SIZE) {
+        throw new Error(`O arquivo "${file.name}" excede o limite de 5MB (${(file.size / 1024 / 1024).toFixed(1)}MB).`);
+      }
+
+      // Validação de extensão
+      const ext = '.' + file.name.split('.').pop().toLowerCase();
+      if (!ALLOWED_EXTENSIONS.includes(ext)) {
+        throw new Error(`Tipo de arquivo não permitido: "${ext}". Apenas imagens (${ALLOWED_EXTENSIONS.join(', ')}) são aceitas.`);
+      }
+
+      const fileName = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
       const { data, error } = await supabase.storage.from('public-images').upload(fileName, file);
       if (error) throw new Error(error.message);
       urls.push(supabase.storage.from('public-images').getPublicUrl(fileName).data.publicUrl);

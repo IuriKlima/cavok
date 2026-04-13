@@ -90,7 +90,9 @@ CREATE TABLE IF NOT EXISTS contatos (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Habilitar Políticas de Segurança RLS
+-- =============================================
+-- HABILITAR ROW LEVEL SECURITY (RLS)
+-- =============================================
 ALTER TABLE configuracoes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE categorias ENABLE ROW LEVEL SECURITY;
 ALTER TABLE marcas ENABLE ROW LEVEL SECURITY;
@@ -99,16 +101,16 @@ ALTER TABLE aeronaves ENABLE ROW LEVEL SECURITY;
 ALTER TABLE slides ENABLE ROW LEVEL SECURITY;
 ALTER TABLE contatos ENABLE ROW LEVEL SECURITY;
 
--- Drop policies if they exist to avoid 'already exists' errors
+-- =============================================
+-- LIMPAR TODAS AS POLÍTICAS ANTERIORES
+-- =============================================
 DROP POLICY IF EXISTS "Anon SELECT" ON configuracoes;
 DROP POLICY IF EXISTS "Anon SELECT" ON categorias;
 DROP POLICY IF EXISTS "Anon SELECT" ON marcas;
 DROP POLICY IF EXISTS "Anon SELECT" ON produtos;
 DROP POLICY IF EXISTS "Anon SELECT" ON aeronaves;
 DROP POLICY IF EXISTS "Anon SELECT" ON slides;
-
 DROP POLICY IF EXISTS "Anon INSERT contatos" ON contatos;
-
 DROP POLICY IF EXISTS "Admin CRUD" ON configuracoes;
 DROP POLICY IF EXISTS "Admin CRUD" ON categorias;
 DROP POLICY IF EXISTS "Admin CRUD" ON marcas;
@@ -116,8 +118,33 @@ DROP POLICY IF EXISTS "Admin CRUD" ON produtos;
 DROP POLICY IF EXISTS "Admin CRUD" ON aeronaves;
 DROP POLICY IF EXISTS "Admin CRUD" ON slides;
 DROP POLICY IF EXISTS "Admin CRUD" ON contatos;
+-- Novas políticas granulares
+DROP POLICY IF EXISTS "Admin Global CRUD" ON configuracoes;
+DROP POLICY IF EXISTS "Admin Global CRUD" ON categorias;
+DROP POLICY IF EXISTS "Admin Global CRUD" ON marcas;
+DROP POLICY IF EXISTS "Admin Global CRUD" ON produtos;
+DROP POLICY IF EXISTS "Admin Global CRUD" ON aeronaves;
+DROP POLICY IF EXISTS "Admin Global CRUD" ON slides;
+DROP POLICY IF EXISTS "Admin Global CRUD" ON contatos;
+DROP POLICY IF EXISTS "Admin Aeronaves CRUD aeronaves" ON aeronaves;
+DROP POLICY IF EXISTS "Admin Aeronaves SELECT categorias" ON categorias;
+DROP POLICY IF EXISTS "Admin Aeronaves CRUD contatos" ON contatos;
+DROP POLICY IF EXISTS "Admin Aeronaves SELECT configuracoes" ON configuracoes;
+DROP POLICY IF EXISTS "Admin Aeronaves UPDATE configuracoes" ON configuracoes;
 
--- Permite GET para Visitantes do Site
+-- =============================================
+-- FUNÇÃO AUXILIAR: Verifica se é admin de aeronaves
+-- =============================================
+CREATE OR REPLACE FUNCTION is_aeronaves_admin()
+RETURNS boolean AS $$
+BEGIN
+  RETURN (auth.jwt()->>'email') LIKE 'aeronaves@%';
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- =============================================
+-- POLÍTICAS DE LEITURA PÚBLICA (Visitantes do Site)
+-- =============================================
 CREATE POLICY "Anon SELECT" ON configuracoes FOR SELECT USING (true);
 CREATE POLICY "Anon SELECT" ON categorias FOR SELECT USING (true);
 CREATE POLICY "Anon SELECT" ON marcas FOR SELECT USING (true);
@@ -125,23 +152,75 @@ CREATE POLICY "Anon SELECT" ON produtos FOR SELECT USING (true);
 CREATE POLICY "Anon SELECT" ON aeronaves FOR SELECT USING (true);
 CREATE POLICY "Anon SELECT" ON slides FOR SELECT USING (true);
 
--- Permite Inserir Contatos para Visitantes
+-- Visitantes podem INSERIR contatos (formulários públicos)
 CREATE POLICY "Anon INSERT contatos" ON contatos FOR INSERT WITH CHECK (true);
 
--- Permite Administrador Painel CRUD Total se logado via Supabase Auth
-CREATE POLICY "Admin CRUD" ON configuracoes FOR ALL USING (auth.role() = 'authenticated');
-CREATE POLICY "Admin CRUD" ON categorias FOR ALL USING (auth.role() = 'authenticated');
-CREATE POLICY "Admin CRUD" ON marcas FOR ALL USING (auth.role() = 'authenticated');
-CREATE POLICY "Admin CRUD" ON produtos FOR ALL USING (auth.role() = 'authenticated');
-CREATE POLICY "Admin CRUD" ON aeronaves FOR ALL USING (auth.role() = 'authenticated');
-CREATE POLICY "Admin CRUD" ON slides FOR ALL USING (auth.role() = 'authenticated');
-CREATE POLICY "Admin CRUD" ON contatos FOR ALL USING (auth.role() = 'authenticated');
+-- =============================================
+-- POLÍTICAS ADMIN GLOBAL (email NÃO começa com 'aeronaves@')
+-- Acesso CRUD total em TODAS as tabelas
+-- =============================================
+CREATE POLICY "Admin Global CRUD" ON configuracoes FOR ALL
+  USING (auth.role() = 'authenticated' AND NOT is_aeronaves_admin());
 
--- Cria a permissão para Storage das imagens importadas
-insert into storage.buckets (id, name, public) values ('public-images', 'public-images', true) ON CONFLICT (id) DO NOTHING;
+CREATE POLICY "Admin Global CRUD" ON categorias FOR ALL
+  USING (auth.role() = 'authenticated' AND NOT is_aeronaves_admin());
+
+CREATE POLICY "Admin Global CRUD" ON marcas FOR ALL
+  USING (auth.role() = 'authenticated' AND NOT is_aeronaves_admin());
+
+CREATE POLICY "Admin Global CRUD" ON produtos FOR ALL
+  USING (auth.role() = 'authenticated' AND NOT is_aeronaves_admin());
+
+CREATE POLICY "Admin Global CRUD" ON aeronaves FOR ALL
+  USING (auth.role() = 'authenticated' AND NOT is_aeronaves_admin());
+
+CREATE POLICY "Admin Global CRUD" ON slides FOR ALL
+  USING (auth.role() = 'authenticated' AND NOT is_aeronaves_admin());
+
+CREATE POLICY "Admin Global CRUD" ON contatos FOR ALL
+  USING (auth.role() = 'authenticated' AND NOT is_aeronaves_admin());
+
+-- =============================================
+-- POLÍTICAS ADMIN AERONAVES (email começa com 'aeronaves@')
+-- Acesso RESTRITO: Apenas aeronaves, contatos de aeronaves,
+-- categorias de aeronaves (somente leitura) e configurações específicas
+-- =============================================
+
+-- Aeronaves: CRUD completo
+CREATE POLICY "Admin Aeronaves CRUD aeronaves" ON aeronaves FOR ALL
+  USING (auth.role() = 'authenticated' AND is_aeronaves_admin());
+
+-- Categorias: Somente SELECT (não pode criar/editar/deletar categorias)
+CREATE POLICY "Admin Aeronaves SELECT categorias" ON categorias FOR SELECT
+  USING (auth.role() = 'authenticated' AND is_aeronaves_admin());
+
+-- Contatos: VER/EDITAR/DELETAR somente os de tipo 'AERONAVE'
+CREATE POLICY "Admin Aeronaves CRUD contatos" ON contatos FOR ALL
+  USING (
+    auth.role() = 'authenticated'
+    AND is_aeronaves_admin()
+    AND tipo = 'AERONAVE'
+  );
+
+-- Configurações: Pode LER todas (para carregar a tela) mas NÃO pode alterar globais
+CREATE POLICY "Admin Aeronaves SELECT configuracoes" ON configuracoes FOR SELECT
+  USING (auth.role() = 'authenticated' AND is_aeronaves_admin());
+
+-- Configurações: Pode ATUALIZAR somente chaves de aeronaves
+CREATE POLICY "Admin Aeronaves UPDATE configuracoes" ON configuracoes FOR UPDATE
+  USING (
+    auth.role() = 'authenticated'
+    AND is_aeronaves_admin()
+    AND chave LIKE 'aeronaves_%'
+  );
+
+-- =============================================
+-- STORAGE (imagens)
+-- =============================================
+INSERT INTO storage.buckets (id, name, public) VALUES ('public-images', 'public-images', true) ON CONFLICT (id) DO NOTHING;
 
 DROP POLICY IF EXISTS "Public Access Storage" ON storage.objects;
 DROP POLICY IF EXISTS "Auth Update Storage" ON storage.objects;
 
-create policy "Public Access Storage" on storage.objects for select using ( bucket_id = 'public-images' );
-create policy "Auth Update Storage" on storage.objects for all using ( bucket_id = 'public-images' and auth.role() = 'authenticated' );
+CREATE POLICY "Public Access Storage" ON storage.objects FOR SELECT USING ( bucket_id = 'public-images' );
+CREATE POLICY "Auth Update Storage" ON storage.objects FOR ALL USING ( bucket_id = 'public-images' AND auth.role() = 'authenticated' );

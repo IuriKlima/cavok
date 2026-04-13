@@ -119,13 +119,31 @@ export async function getSlides() {
 }
 
 // ====== Contato ======
+const MAX_LENGTHS = { nome: 100, email: 150, telefone: 30, mensagem: 5000 };
+
 export async function enviarContato(formData) {
+  // Sanitização de inputs
+  const nome = (formData.nome || '').trim().slice(0, MAX_LENGTHS.nome);
+  const email = (formData.email || '').trim().slice(0, MAX_LENGTHS.email);
+  const telefone = (formData.telefone || '').trim().slice(0, MAX_LENGTHS.telefone) || null;
+  const mensagem = (formData.mensagem || '').trim().slice(0, MAX_LENGTHS.mensagem);
+  const tipo = ['CONTATO', 'ORCAMENTO', 'AERONAVE'].includes(formData.tipo) ? formData.tipo : 'CONTATO';
+
+  if (!nome || !email || !mensagem) {
+    throw new Error('Campos obrigatórios: nome, email e mensagem.');
+  }
+
+  // Validação básica de email
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    throw new Error('Email inválido.');
+  }
+
   const { error } = await supabase.from('contatos').insert({
-    nome: formData.nome,
-    email: formData.email,
-    telefone: formData.telefone || null,
-    mensagem: formData.mensagem,
-    tipo: formData.tipo || 'CONTATO',
+    nome,
+    email,
+    telefone,
+    mensagem,
+    tipo,
   });
   if (error) throw new Error(error.message);
   return { success: true };

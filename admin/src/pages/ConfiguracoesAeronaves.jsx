@@ -15,13 +15,25 @@ export default function ConfiguracoesAeronaves() {
   };
 
   useEffect(() => {
-    getConfiguracoes().then(data => {
-      // Filtra apenas configurações que interessam para Aeronaves
-      if (data) {
-        const myKeys = Object.keys(labels);
-        const filtered = data.filter(c => myKeys.includes(c.chave));
-        setConfigs(filtered.map(c => ({ ...c, valor: c.valor || '' })));
+    getConfiguracoes().then(async (data) => {
+      const myKeys = Object.keys(labels);
+      const existing = (data || []).filter(c => myKeys.includes(c.chave));
+      const existingKeys = existing.map(c => c.chave);
+
+      // Criar automaticamente as chaves que não existem no banco
+      const missing = myKeys.filter(k => !existingKeys.includes(k));
+      if (missing.length > 0) {
+        const payload = missing.map(chave => ({ chave, valor: '', tipo: chave.includes('imagem') ? 'image' : 'text' }));
+        try {
+          const created = await atualizarConfiguracoes(payload);
+          if (created) {
+            const newItems = created.filter(c => myKeys.includes(c.chave));
+            existing.push(...newItems);
+          }
+        } catch (e) { console.error('Erro ao criar configs:', e); }
       }
+
+      setConfigs(existing.map(c => ({ ...c, valor: c.valor || '' })));
       setLoading(false);
     }).catch(() => setLoading(false));
   }, []);

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { getAeronave, getAeronavesRelacionadas, enviarContato } from '@/lib/api';
+import { sanitizeHtml } from '@/lib/sanitize';
 import { Plane, CheckCircle, XCircle, MessageCircle, Mail, FileText, Search, Handshake, Send, X, User } from 'lucide-react';
 import { useSiteData } from '@/context/SiteContext';
 import styles from './page.module.css';
@@ -131,14 +132,14 @@ export default function AeronaveDetalhe() {
         {aeronave.descricao && (
           <div className={styles.descSection}>
             <h2 className={styles.descTitle}>Sobre esta Aeronave</h2>
-            <div className={styles.descContent} dangerouslySetInnerHTML={{ __html: aeronave.descricao }} />
+            <div className={styles.descContent} dangerouslySetInnerHTML={{ __html: sanitizeHtml(aeronave.descricao) }} />
           </div>
         )}
 
         {aeronave.especificacoes && (
           <div className={styles.descSection}>
             <h2 className={styles.descTitle}>Especificações Técnicas</h2>
-            <div className={styles.descContent} dangerouslySetInnerHTML={{ __html: aeronave.especificacoes }} />
+            <div className={styles.descContent} dangerouslySetInnerHTML={{ __html: sanitizeHtml(aeronave.especificacoes) }} />
           </div>
         )}
 
