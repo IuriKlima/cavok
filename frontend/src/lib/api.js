@@ -1,7 +1,24 @@
 import { supabase } from './supabase';
 
+// Mapeia campos snake_case do Supabase para camelCase do frontend legado
+function mapItem(item) {
+  if (!item) return item;
+  return {
+    ...item,
+    imagemPrincipal: item.imagem_url || null,
+    descricaoCurta: item.descricao_curta || null,
+    categoriaId: item.categoria_id || null,
+    marcaId: item.marca_id || null,
+    imagemUrl: item.imagem_url || null,
+  };
+}
+
+function mapList(items) {
+  return (items || []).map(mapItem);
+}
+
 function formatPagination(data, count, size) {
-  return { content: data || [], totalElements: count || 0, totalPages: Math.ceil((count || 0) / size) };
+  return { content: mapList(data), totalElements: count || 0, totalPages: Math.ceil((count || 0) / size) };
 }
 
 // ====== Produtos ======
@@ -21,14 +38,14 @@ export async function getProdutos({ page = 0, size = 12, categoriaId, marcaId } 
 
 export async function getProduto(slug) {
   const { data } = await supabase.from('produtos').select('*, categoria:categorias(nome), marca:marcas(nome)').eq('slug', slug).single();
-  return data;
+  return mapItem(data);
 }
 
 export async function getProdutosRelacionados(slug) {
   const current = await getProduto(slug);
   if (!current?.categoria_id) return [];
   const { data } = await supabase.from('produtos').select('*').eq('categoria_id', current.categoria_id).neq('slug', slug).limit(4);
-  return data || [];
+  return mapList(data);
 }
 
 export async function buscarProdutos(q, page = 0, size = 12) {
@@ -40,8 +57,8 @@ export async function buscarProdutos(q, page = 0, size = 12) {
 }
 
 export async function getProdutosDestaques() {
-  const { data } = await supabase.from('produtos').select('*').limit(8); // Simulando destaques
-  return data || [];
+  const { data } = await supabase.from('produtos').select('*').limit(8);
+  return mapList(data);
 }
 
 // ====== Aeronaves ======
@@ -60,15 +77,16 @@ export async function getAeronaves({ page = 0, size = 12, categoriaId } = {}) {
 
 export async function getAeronave(slug) {
   const { data } = await supabase.from('aeronaves').select('*, categoria:categorias(nome)').eq('slug', slug).single();
-  return data;
+  return mapItem(data);
 }
 
 export async function getAeronavesRelacionadas(slug) {
   const current = await getAeronave(slug);
   if (!current?.categoria_id) return [];
   const { data } = await supabase.from('aeronaves').select('*').eq('categoria_id', current.categoria_id).neq('slug', slug).limit(4);
-  return data || [];
+  return mapList(data);
 }
+
 
 // ====== Categorias ======
 export async function getCategorias(tipo) {
@@ -101,8 +119,13 @@ export async function getSlides() {
 }
 
 // ====== Contato ======
-export async function enviarContato(data) {
-  console.log("Mock de envio de contato pro Supabase", data);
-  // Pode ser implementado salvando as mensagens numa base 'contatos' no supabase
+export async function enviarContato(formData) {
+  const { error } = await supabase.from('contatos').insert({
+    nome: formData.nome,
+    email: formData.email,
+    telefone: formData.telefone || null,
+    mensagem: formData.mensagem,
+  });
+  if (error) throw new Error(error.message);
   return { success: true };
 }

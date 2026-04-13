@@ -306,26 +306,111 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .topBar { font-size: 0.78rem; }
+  .topBarInner { padding: 6px 16px; flex-wrap: wrap; justify-content: center; gap: 4px; }
   .topContact { display: none; }
-  .mobileMenuBtn { display: block; }
-  .searchBar { max-width: 100%; order: 3; }
-  .mainHeaderInner { flex-wrap: wrap; }
-  
+  .topLinks { gap: 4px; }
+  .topLinkActive, .topLinkAccent { padding: 5px 12px; font-size: 0.75rem; }
+
+  .mobileMenuBtn { display: flex; align-items: center; justify-content: center; }
+
+  .mainHeaderInner {
+    flex-wrap: nowrap;
+    padding: 10px 16px;
+    gap: 12px;
+  }
+
+  .logo { flex-shrink: 0; }
+  .logoImg { max-height: 36px; }
+  .logoName { font-size: 1.3rem; }
+  .logoSub { font-size: 0.55rem; }
+
+  .searchBar {
+    flex: 1;
+    min-width: 0;
+    order: 0;
+  }
+
+  .searchInput { padding: 10px 12px; font-size: 0.88rem; }
+  .searchBtn { padding: 10px 14px; }
+
+  .cartIcon { padding: 6px 8px; border: none; }
+  .cartLabel { display: none; }
+  .cartBadge { top: -4px; left: -6px; min-width: 18px; height: 18px; font-size: 0.65rem; }
+
   .catNav {
     display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--primary);
+    z-index: 9999;
+    overflow-y: auto;
+    padding-top: 60px;
   }
   
   .catNavOpen {
     display: block;
+    animation: slideDown 0.3s ease;
   }
   
   .catNavInner {
     flex-direction: column;
     align-items: stretch;
+    padding: 8px 20px;
   }
   
   .catLink {
-    padding: 12px 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-size: 0.95rem;
   }
+
+  .catSeparator {
+    width: 100%;
+    height: 1px;
+    margin: 8px 0;
+    background: rgba(255,255,255,0.15);
+  }
+
+  .catDropdownMenu {
+    position: static;
+    display: block;
+    background: rgba(0,0,0,0.1);
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
+  }
+
+  .catDropdownMenu a {
+    color: rgba(255,255,255,0.8);
+    padding: 12px 36px;
+    font-size: 0.9rem;
+  }
+
+  .catDropdownMenu a:hover {
+    background: rgba(255,255,255,0.1);
+    color: white;
+  }
+}
+
+@media (max-width: 480px) {
+  .mainHeaderInner {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .searchInput { padding: 8px 10px; font-size: 0.82rem; }
+  .searchBtn { padding: 8px 12px; }
+
+  .logoImg { max-height: 30px; }
+  .logoName { font-size: 1.1rem; }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
 }

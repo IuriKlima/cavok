@@ -231,9 +231,18 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 640px) {
   .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
-  .section { padding: 50px 0; }
-  .section-title { font-size: 1.6rem; }
+  .section { padding: 40px 0; }
+  .section-title { font-size: 1.4rem; }
   :root { --header-height: 70px; }
+  .container { padding: 0 16px; }
+
+  .btn { padding: 10px 20px; font-size: 0.88rem; }
+  .btn-lg { padding: 14px 28px; font-size: 0.95rem; }
+}
+
+@media (max-width: 380px) {
+  .container { padding: 0 12px; }
+  .btn { padding: 10px 16px; font-size: 0.85rem; }
 }
 
 /* ====== Badge ====== */

@@ -3,9 +3,11 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-# Utiliza env args no build se necessitar, mas o ideal para VITE_ na containerização é passar arg durante build ou lidar em runtime
-ARG VITE_IMGBB_API_KEY
-ENV VITE_IMGBB_API_KEY=$VITE_IMGBB_API_KEY
+# Variáveis Supabase injetadas no build do Vite
+ARG VITE_SUPABASE_URL
+ARG VITE_SUPABASE_ANON_KEY
+ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
+ENV VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY
 RUN npm run build
 
 FROM nginx:alpine

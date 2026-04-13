@@ -23,11 +23,11 @@ export default function ProdutoForm() {
       getProduto(id).then(data => {
         if (data) setForm({
           nome: data.nome || '', slug: data.slug || '', sku: data.sku || '',
-          descricao: data.descricao || '', descricaoCurta: data.descricaoCurta || '',
-          preco: data.preco || '', categoriaId: data.categoria?.id || '',
-          marcaId: data.marca?.id || '', condicao: data.condicao || 'Novo',
+          descricao: data.descricao || '', descricaoCurta: data.descricaoCurta || data.descricao_curta || '',
+          preco: data.preco || '', categoriaId: data.categoriaId || data.categoria_id || '',
+          marcaId: data.marcaId || data.marca_id || '', condicao: data.condicao || 'Novo',
           status: data.status || 'ATIVO', destaque: data.destaque || false,
-          homologado: data.homologado || false, imagemPrincipal: data.imagemPrincipal || '',
+          homologado: data.homologado || false, imagemPrincipal: data.imagemPrincipal || data.imagem_url || '',
           imagens: data.imagens || [],
         });
       });
@@ -77,9 +77,9 @@ export default function ProdutoForm() {
     e.preventDefault();
     setLoading(true);
     try {
-      const payload = { ...form, preco: form.preco ? Number(form.preco) : null, categoriaId: form.categoriaId ? Number(form.categoriaId) : null };
-      if (isEdit) await atualizarProduto(id, payload);
-      else await criarProduto(payload);
+      // api.js produtoToSnake() faz a conversão dos campos
+      if (isEdit) await atualizarProduto(id, form);
+      else await criarProduto(form);
       navigate('/produtos');
     } catch (err) { alert('Erro: ' + err.message); }
     setLoading(false);

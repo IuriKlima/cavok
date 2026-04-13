@@ -53,7 +53,7 @@ export default function Configuracoes() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const payload = configs.map(c => ({ chave: c.chave, valor: c.valor || '', tipo: c.tipo || 'text' }));
+      const payload = configs.map(c => ({ id: c.id, chave: c.chave, valor: c.valor || '', tipo: c.tipo || 'text' }));
       const updated = await atualizarConfiguracoes(payload);
       if (updated) setConfigs(updated.map(c => ({ ...c, valor: c.valor || '' })));
       alert('Configurações salvas!');

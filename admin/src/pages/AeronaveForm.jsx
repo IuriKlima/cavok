@@ -22,11 +22,11 @@ export default function AeronaveForm() {
       getAeronave(id).then(data => {
         if (data) setForm({
           nome: data.nome || '', slug: data.slug || '', descricao: data.descricao || '',
-          assentos: data.assentos || '', horasCelula: data.horasCelula || '',
-          anoFabricacao: data.anoFabricacao || '', especificacoes: data.especificacoes || '',
+          assentos: data.assentos || '', horasCelula: data.horasCelula || data.horas_celula || '',
+          anoFabricacao: data.anoFabricacao || data.ano_fabricacao || '', especificacoes: data.especificacoes || '',
           preco: data.preco || '', status: data.status || 'DISPONIVEL',
-          destaque: data.destaque || false, categoriaId: data.categoria?.id || '',
-          imagemPrincipal: data.imagemPrincipal || '', imagens: data.imagens || [],
+          destaque: data.destaque || false, categoriaId: data.categoriaId || data.categoria_id || '',
+          imagemPrincipal: data.imagemPrincipal || data.imagem_url || '', imagens: data.imagens || [],
         });
       });
     }
@@ -74,9 +74,9 @@ export default function AeronaveForm() {
     e.preventDefault();
     setLoading(true);
     try {
-      const payload = { ...form, preco: form.preco ? Number(form.preco) : null, categoriaId: form.categoriaId ? Number(form.categoriaId) : null };
-      if (isEdit) await atualizarAeronave(id, payload);
-      else await criarAeronave(payload);
+      // api.js aeronaveToSnake() faz a conversão dos campos
+      if (isEdit) await atualizarAeronave(id, form);
+      else await criarAeronave(form);
       navigate('/aeronaves');
     } catch (err) { alert('Erro: ' + err.message); }
     setLoading(false);

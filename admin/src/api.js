@@ -22,9 +22,79 @@ export function setUser(user) {
 export const login = async (email, senha) => {
   const { data, error } = await supabase.auth.signInWithPassword({ email, password: senha });
   if (error) throw new Error(error.message);
-  setUser(data.user);
-  return { token: data.session.access_token, nome: data.user.email, role: 'ADMIN' };
+  // Determina a role baseado no email
+  const role = email.toLowerCase().startsWith('aeronaves@') ? 'AERONAVES' : 'ADMIN';
+  const userData = { ...data.user, role };
+  setUser(userData);
+  return { token: data.session.access_token, nome: data.user.email, email: data.user.email, role };
 };
+
+// =============================================
+// Mapeamento camelCase <-> snake_case
+// =============================================
+
+// Converte payload do form (camelCase) para colunas do Supabase (snake_case)
+function produtoToSnake(form) {
+  return {
+    nome: form.nome,
+    slug: form.slug || undefined,
+    sku: form.sku || null,
+    descricao: form.descricao || null,
+    descricao_curta: form.descricaoCurta || null,
+    preco: form.preco ? Number(form.preco) : null,
+    categoria_id: form.categoriaId || null,
+    marca_id: form.marcaId || null,
+    condicao: form.condicao || null,
+    status: form.status || 'ATIVO',
+    destaque: form.destaque || false,
+    homologado: form.homologado || false,
+    imagem_url: form.imagemPrincipal || null,
+    imagens: form.imagens || [],
+  };
+}
+
+// Converte dados do Supabase (snake_case) para o form (camelCase)
+function produtoFromSnake(data) {
+  if (!data) return null;
+  return {
+    ...data,
+    descricaoCurta: data.descricao_curta || '',
+    categoriaId: data.categoria_id || '',
+    marcaId: data.marca_id || '',
+    imagemPrincipal: data.imagem_url || '',
+    imagens: data.imagens || [],
+  };
+}
+
+function aeronaveToSnake(form) {
+  return {
+    nome: form.nome,
+    slug: form.slug || undefined,
+    descricao: form.descricao || null,
+    assentos: form.assentos || null,
+    horas_celula: form.horasCelula || null,
+    ano_fabricacao: form.anoFabricacao || null,
+    especificacoes: form.especificacoes || null,
+    preco: form.preco ? Number(form.preco) : null,
+    categoria_id: form.categoriaId || null,
+    status: form.status || 'DISPONIVEL',
+    destaque: form.destaque || false,
+    imagem_url: form.imagemPrincipal || null,
+    imagens: form.imagens || [],
+  };
+}
+
+function aeronaveFromSnake(data) {
+  if (!data) return null;
+  return {
+    ...data,
+    horasCelula: data.horas_celula || '',
+    anoFabricacao: data.ano_fabricacao || '',
+    categoriaId: data.categoria_id || '',
+    imagemPrincipal: data.imagem_url || '',
+    imagens: data.imagens || [],
+  };
+}
 
 // Dashboard
 export const getDashboard = async () => {
@@ -45,9 +115,20 @@ export const getProdutos = async (page = 0, size = 20, q = '') => {
   if (error) throw new Error(error.message);
   return formatPagination(data, count);
 };
-export const getProduto = async (id) => (await supabase.from('produtos').select('*').eq('id', id).single()).data;
-export const criarProduto = async (data) => await supabase.from('produtos').insert(data);
-export const atualizarProduto = async (id, data) => await supabase.from('produtos').update(data).eq('id', id);
+export const getProduto = async (id) => {
+  const { data } = await supabase.from('produtos').select('*').eq('id', id).single();
+  return produtoFromSnake(data);
+};
+export const criarProduto = async (formData) => {
+  const payload = produtoToSnake(formData);
+  const { error } = await supabase.from('produtos').insert(payload);
+  if (error) throw new Error(error.message);
+};
+export const atualizarProduto = async (id, formData) => {
+  const payload = produtoToSnake(formData);
+  const { error } = await supabase.from('produtos').update(payload).eq('id', id);
+  if (error) throw new Error(error.message);
+};
 export const deletarProduto = async (id) => await supabase.from('produtos').delete().eq('id', id);
 
 // Aeronaves
@@ -56,9 +137,20 @@ export const getAeronaves = async (page = 0, size = 20) => {
   if (error) throw new Error(error.message);
   return formatPagination(data, count);
 };
-export const getAeronave = async (id) => (await supabase.from('aeronaves').select('*').eq('id', id).single()).data;
-export const criarAeronave = async (data) => await supabase.from('aeronaves').insert(data);
-export const atualizarAeronave = async (id, data) => await supabase.from('aeronaves').update(data).eq('id', id);
+export const getAeronave = async (id) => {
+  const { data } = await supabase.from('aeronaves').select('*').eq('id', id).single();
+  return aeronaveFromSnake(data);
+};
+export const criarAeronave = async (formData) => {
+  const payload = aeronaveToSnake(formData);
+  const { error } = await supabase.from('aeronaves').insert(payload);
+  if (error) throw new Error(error.message);
+};
+export const atualizarAeronave = async (id, formData) => {
+  const payload = aeronaveToSnake(formData);
+  const { error } = await supabase.from('aeronaves').update(payload).eq('id', id);
+  if (error) throw new Error(error.message);
+};
 export const deletarAeronave = async (id) => await supabase.from('aeronaves').delete().eq('id', id);
 
 // Categorias
@@ -75,8 +167,11 @@ export const deletarCategoria = async (id) => await supabase.from('categorias').
 // Configurações e slides
 export const getConfiguracoes = async () => (await supabase.from('configuracoes').select('*')).data;
 export const atualizarConfiguracoes = async (data) => {
-    // Para array de atualizações em massa pelas chaves
-    const { data: result, error } = await supabase.from('configuracoes').upsert(data, { onConflict: 'chave' }).select();
+    // Inclui o id no payload para que o upsert funcione corretamente
+    const { data: result, error } = await supabase
+      .from('configuracoes')
+      .upsert(data, { onConflict: 'chave' })
+      .select();
     if (error) throw new Error(error.message);
     return result;
 };
@@ -95,6 +190,20 @@ export const uploadFiles = async (files) => {
       urls.push(supabase.storage.from('public-images').getPublicUrl(fileName).data.publicUrl);
   }
   return { urls };
+};
+
+// Contatos (Formulário do site público)
+export const getContatos = async () => {
+  const { data } = await supabase.from('contatos').select('*').order('created_at', { ascending: false });
+  return data || [];
+};
+export const marcarContatoLido = async (id) => {
+  const { error } = await supabase.from('contatos').update({ lido: true }).eq('id', id);
+  if (error) throw new Error(error.message);
+};
+export const deletarContato = async (id) => {
+  const { error } = await supabase.from('contatos').delete().eq('id', id);
+  if (error) throw new Error(error.message);
 };
 
 // Legacy Exports (Para compilação do Vite de telas antigas descontinuadas)
