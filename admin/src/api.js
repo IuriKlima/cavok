@@ -96,3 +96,10 @@ export const uploadFiles = async (files) => {
   }
   return { urls };
 };
+
+// Legacy Exports (Para compilação do Vite de telas antigas descontinuadas)
+export const setToken = (t) => {}; 
+export const getPaginas = async () => ({ content: [], totalElements: 0, totalPages: 0 });
+export const criarPagina = async () => {};
+export const atualizarPagina = async () => {};
+export const deletarPagina = async () => {};
