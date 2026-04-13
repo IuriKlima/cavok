@@ -193,10 +193,23 @@ export const atualizarConfiguracoes = async (data) => {
     if (error) throw new Error(error.message);
     return result;
 };
-export const getSlides = async () => (await supabase.from('slides').select('*')).data;
-export const criarSlide = async (data) => await supabase.from('slides').insert(data);
-export const atualizarSlide = async (id, data) => await supabase.from('slides').update(data).eq('id', id);
-export const deletarSlide = async (id) => await supabase.from('slides').delete().eq('id', id);
+export const getSlides = async () => {
+    const { data, error } = await supabase.from('slides').select('*').order('ordem', { ascending: true });
+    if (error) throw new Error(error.message);
+    return data;
+};
+export const criarSlide = async (data) => {
+    const { error } = await supabase.from('slides').insert(data);
+    if (error) throw new Error(error.message);
+};
+export const atualizarSlide = async (id, data) => {
+    const { error } = await supabase.from('slides').update(data).eq('id', id);
+    if (error) throw new Error(error.message);
+};
+export const deletarSlide = async (id) => {
+    const { error } = await supabase.from('slides').delete().eq('id', id);
+    if (error) throw new Error(error.message);
+};
 
 // Uploads Supabase Storage Native File
 export const uploadFiles = async (files) => {

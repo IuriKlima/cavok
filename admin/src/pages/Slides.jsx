@@ -6,7 +6,7 @@ export default function Slides() {
   const [slides, setSlides] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState({ titulo: '', subtitulo: '', imagemUrl: '', link: '', textoBotao: '', ordem: 0, ativo: true });
+  const [form, setForm] = useState({ titulo: '', subtitulo: '', imagem_url: '', link: '', texto_botao: '', ordem: 0, ativo: true });
   const [uploading, setUploading] = useState(false);
 
   const fetchSlides = () => {
@@ -17,13 +17,13 @@ export default function Slides() {
   useEffect(() => { fetchSlides(); }, []);
 
   const resetForm = () => {
-    setForm({ titulo: '', subtitulo: '', imagemUrl: '', link: '', textoBotao: '', ordem: slides.length, ativo: true });
+    setForm({ titulo: '', subtitulo: '', imagem_url: '', link: '', texto_botao: '', ordem: slides.length, ativo: true });
     setEditing(null);
   };
 
   const handleEdit = (slide) => {
     setEditing(slide.id);
-    setForm({ titulo: slide.titulo || '', subtitulo: slide.subtitulo || '', imagemUrl: slide.imagemUrl || '', link: slide.link || '', textoBotao: slide.textoBotao || '', ordem: slide.ordem, ativo: slide.ativo });
+    setForm({ titulo: slide.titulo || '', subtitulo: slide.subtitulo || '', imagem_url: slide.imagem_url || '', link: slide.link || '', texto_botao: slide.texto_botao || '', ordem: slide.ordem, ativo: slide.ativo });
   };
 
   const handleImageUpload = async (e) => {
@@ -32,7 +32,7 @@ export default function Slides() {
     setUploading(true);
     try {
       const result = await uploadFiles(files);
-      if (result?.urls?.[0]) setForm(prev => ({ ...prev, imagemUrl: result.urls[0] }));
+      if (result?.urls?.[0]) setForm(prev => ({ ...prev, imagem_url: result.urls[0] }));
     } catch (err) { alert('Erro no upload: ' + err.message); }
     setUploading(false);
   };
@@ -92,22 +92,22 @@ export default function Slides() {
           </div>
           <div className="form-group">
             <label className="form-label">Texto do Botão</label>
-            <input className="form-input" value={form.textoBotao} onChange={e => setForm(f => ({ ...f, textoBotao: e.target.value }))} placeholder="Ver Produtos" />
+            <input className="form-input" value={form.texto_botao} onChange={e => setForm(f => ({ ...f, texto_botao: e.target.value }))} placeholder="Ver Produtos" />
           </div>
         </div>
         <div className="form-group" style={{ marginTop: 16 }}>
           <label className="form-label">Imagem de Fundo</label>
           <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-            <input className="form-input" value={form.imagemUrl} onChange={e => setForm(f => ({ ...f, imagemUrl: e.target.value }))} placeholder="URL da imagem" style={{ flex: 1 }} />
+            <input className="form-input" value={form.imagem_url} onChange={e => setForm(f => ({ ...f, imagem_url: e.target.value }))} placeholder="URL da imagem" style={{ flex: 1 }} />
             <label className="btn btn-ghost" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}>
               <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} />
               <Upload size={16} /> {uploading ? 'Enviando...' : 'Upload'}
             </label>
           </div>
         </div>
-        {form.imagemUrl && (
+        {form.imagem_url && (
           <div style={{ marginTop: 12, borderRadius: 8, overflow: 'hidden', maxHeight: 200 }}>
-            <img src={form.imagemUrl} alt="Preview" style={{ width: '100%', height: 200, objectFit: 'cover' }} />
+            <img src={form.imagem_url} alt="Preview" style={{ width: '100%', height: 200, objectFit: 'cover' }} />
           </div>
         )}
         <div style={{ display: 'flex', gap: 12, marginTop: 20, justifyContent: 'flex-end' }}>
@@ -128,7 +128,7 @@ export default function Slides() {
           <div key={slide.id} className="card" style={{ padding: 16, display: 'flex', alignItems: 'center', gap: 16, opacity: slide.ativo ? 1 : 0.5 }}>
             <div style={{ color: 'var(--text-dim)', cursor: 'grab' }}><GripVertical size={20} /></div>
             <div style={{ width: 120, height: 68, borderRadius: 8, overflow: 'hidden', flexShrink: 0, background: 'var(--bg-tertiary)' }}>
-              {slide.imagemUrl ? <img src={slide.imagemUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--text-dim)', fontSize: '0.75rem' }}>Sem imagem</div>}
+              {slide.imagem_url ? <img src={slide.imagem_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--text-dim)', fontSize: '0.75rem' }}>Sem imagem</div>}
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontWeight: 700, color: 'var(--text)', fontSize: '0.95rem' }}>{slide.titulo || '(Sem título)'}</div>
