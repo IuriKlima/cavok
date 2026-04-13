@@ -11,7 +11,8 @@ const fullMenu = [
   { path: '/slides', icon: <Image size={20}/>, label: 'Slides' },
   { path: '/paginas', icon: <FileText size={20}/>, label: 'Páginas' },
   { path: '/contatos', icon: <MessageSquare size={20}/>, label: 'Contatos' },
-  { path: '/configuracoes', icon: <Settings size={20}/>, label: 'Configurações' },
+  { path: '/configuracoes-avionicos', icon: <Settings size={20}/>, label: 'Config. Globais' },
+  { path: '/configuracoes-aeronaves', icon: <Settings size={20}/>, label: 'Config. Aeronaves' },
   { path: '/importar', icon: <Download size={20}/>, label: 'Importar XML' },
 ];
 
@@ -19,6 +20,7 @@ const aeronavesMenu = [
   { path: '/', icon: <LayoutDashboard size={20}/>, label: 'Dashboard' },
   { path: '/aeronaves', icon: <Plane size={20}/>, label: 'Aeronaves' },
   { path: '/contatos', icon: <MessageSquare size={20}/>, label: 'Contatos' },
+  { path: '/configuracoes-aeronaves', icon: <Settings size={20}/>, label: 'Configurações' },
 ];
 
 export default function Sidebar() {

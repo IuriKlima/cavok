@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { getConfiguracoes, atualizarConfiguracoes, uploadFiles } from '../api';
-import { Save, Upload, Image } from 'lucide-react';
+import { Save, Upload, Image as ImageIcon } from 'lucide-react';
 
-export default function Configuracoes() {
+export default function ConfiguracoesAvionicos() {
   const [configs, setConfigs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -16,9 +16,6 @@ export default function Configuracoes() {
     sobre_titulo: 'Título da Página Sobre', sobre_texto: 'Texto da Página Sobre',
     contato_titulo: 'Título da Página Contato', contato_texto: 'Texto da Página Contato',
     logo_avionicos: 'Logo Aviônicos', logo_aeronaves: 'Logo Aeronaves',
-    aeronaves_hero_titulo: 'Título Hero Aeronaves', aeronaves_hero_subtitulo: 'Subtítulo Hero Aeronaves',
-    aeronaves_hero_imagem: 'Imagem Hero Aeronaves',
-    aeronaves_telefone: 'Telefone (Aeronaves)', aeronaves_email: 'Email (Aeronaves)', aeronaves_whatsapp: 'WhatsApp Nº (Aeronaves)',
   };
 
   useEffect(() => {
@@ -64,17 +61,18 @@ export default function Configuracoes() {
 
   if (loading) return <div style={{ padding: 60, textAlign: 'center', color: 'var(--text-dim)' }}>Carregando...</div>;
 
-  const imageKeys = ['logo_avionicos', 'logo_aeronaves', 'aeronaves_hero_imagem'];
+  const imageKeys = ['logo_avionicos', 'logo_aeronaves'];
 
   const sections = [
     { title: '📱 Contato (Geral / Aviônicos)', keys: ['telefone', 'email', 'whatsapp', 'endereco', 'instagram', 'facebook'] },
-    { title: '✈️ Contato (Aeronaves)', keys: ['aeronaves_telefone', 'aeronaves_email', 'aeronaves_whatsapp'] },
     { title: '🌐 Site', keys: ['site_nome', 'site_descricao'] },
     { title: '🎨 Logos', keys: ['logo_avionicos', 'logo_aeronaves'] },
     { title: '🏠 Página Inicial (Aviônicos)', keys: ['hero_titulo', 'hero_subtitulo'] },
-    { title: '✈️ Página de Aeronaves', keys: ['aeronaves_hero_titulo', 'aeronaves_hero_subtitulo', 'aeronaves_hero_imagem'] },
     { title: '📄 Páginas Internas', keys: ['sobre_titulo', 'sobre_texto', 'contato_titulo', 'contato_texto'] },
   ];
+
+  // Identifica chaves que pertencem a Aeronaves para OMITIR das 'Outras Configurações'
+  const aeronavesKeys = ['aeronaves_telefone', 'aeronaves_email', 'aeronaves_whatsapp', 'aeronaves_hero_titulo', 'aeronaves_hero_subtitulo', 'aeronaves_hero_imagem'];
 
   const renderField = (c) => {
     const isImage = imageKeys.includes(c.chave) || c.tipo === 'image';
@@ -120,8 +118,8 @@ export default function Configuracoes() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
         <div>
-          <h1 style={{ fontSize: '1.6rem', fontWeight: 800 }}>Configurações</h1>
-          <p style={{ color: 'var(--text-dim)', fontSize: '0.9rem' }}>Textos, logos e configurações do site (100% dinâmico)</p>
+          <h1 style={{ fontSize: '1.6rem', fontWeight: 800 }}>Configurações Globais</h1>
+          <p style={{ color: 'var(--text-dim)', fontSize: '0.9rem' }}>Textos, logos e contatos gerais do site</p>
         </div>
         <button className="btn btn-primary" onClick={handleSave} disabled={saving} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <Save size={16} /> {saving ? 'Salvando...' : 'Salvar Alterações'}
@@ -143,7 +141,7 @@ export default function Configuracoes() {
 
       {/* Configs not in any section */}
       {(() => {
-        const allKeys = sections.flatMap(s => s.keys);
+        const allKeys = [...sections.flatMap(s => s.keys), ...aeronavesKeys];
         const otherConfigs = configs.filter(c => !allKeys.includes(c.chave));
         if (otherConfigs.length === 0) return null;
         return (

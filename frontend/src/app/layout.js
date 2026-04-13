@@ -4,6 +4,7 @@ import Footer from '@/components/Footer/Footer';
 import WhatsAppButton from '@/components/WhatsAppButton/WhatsAppButton';
 import { SiteProvider } from '@/context/SiteContext';
 import { CartProvider } from '@/context/CartContext';
+import ScrollToTop from '@/components/ScrollToTop/ScrollToTop';
 
 export const metadata = {
   title: 'Cavok Avionics | Venda de Aviônicos e Aeronaves',
@@ -24,6 +25,7 @@ export default function RootLayout({ children }) {
       <body>
         <SiteProvider>
           <CartProvider>
+            <ScrollToTop />
             <Header />
             <main>{children}</main>
             <Footer />

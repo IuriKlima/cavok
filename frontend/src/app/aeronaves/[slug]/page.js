@@ -2,8 +2,9 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { getAeronave, getAeronavesRelacionadas } from '@/lib/api';
-import { Plane, CheckCircle, XCircle, MessageCircle, Mail, FileText, Search, Handshake } from 'lucide-react';
+import { getAeronave, getAeronavesRelacionadas, enviarContato } from '@/lib/api';
+import { Plane, CheckCircle, XCircle, MessageCircle, Mail, FileText, Search, Handshake, Send, X, User } from 'lucide-react';
+import { useSiteData } from '@/context/SiteContext';
 import styles from './page.module.css';
 
 export default function AeronaveDetalhe() {
@@ -13,6 +14,9 @@ export default function AeronaveDetalhe() {
   const [relacionadas, setRelacionadas] = useState([]);
   const [activeImage, setActiveImage] = useState(0);
   const [loading, setLoading] = useState(true);
+  const { config } = useSiteData();
+  const [showPopup, setShowPopup] = useState(false);
+  const [formData, setFormData] = useState({ nome: '', email: '' });
 
   useEffect(() => {
     getAeronave(slug).then(data => {
@@ -26,6 +30,35 @@ export default function AeronaveDetalhe() {
 
   if (loading) return <div style={{ padding: '100px', textAlign: 'center', color: '#888' }}>Carregando...</div>;
   if (!aeronave) return <div style={{ padding: '100px', textAlign: 'center' }}>Aeronave não encontrada.</div>;
+
+  const handleSendToWhatsApp = async (e) => {
+    e.preventDefault();
+    if (!formData.nome || !formData.email) {
+      alert('Por favor, preencha nome e email.');
+      return;
+    }
+
+    const whatsappNumber = config?.whatsapp || '5519983296170';
+    let message = `Olá! Meu nome é *${formData.nome}* (${formData.email}) e tenho interesse na aeronave: *${aeronave.nome}*`;
+    if (aeronave.preco) {
+      message += ` anunciada por R$ ${Number(aeronave.preco).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+    }
+
+    try {
+      await enviarContato({
+        nome: formData.nome,
+        email: formData.email,
+        mensagem: message,
+        tipo: 'AERONAVE'
+      });
+    } catch (e) {
+      console.error('Erro ao salvar contato:', e);
+    }
+
+    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    setShowPopup(false);
+    window.open(url, '_blank');
+  };
 
   const allImages = [aeronave.imagemPrincipal, ...(aeronave.imagens || [])].filter(Boolean);
 
@@ -81,9 +114,9 @@ export default function AeronaveDetalhe() {
             )}
 
             <div className={styles.actions}>
-              <a href={`https://wa.me/5519983296170?text=Olá! Tenho interesse na aeronave: ${aeronave.nome}`} target="_blank" rel="noopener" className="btn btn-accent btn-lg" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+              <button onClick={() => setShowPopup(true)} className="btn btn-accent btn-lg" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
                 <MessageCircle size={20}/> Tenho Interesse
-              </a>
+              </button>
               <Link href="/contato" className="btn btn-outline btn-lg" style={{display: 'flex', alignItems: 'center', gap: '8px'}}><Mail size={20}/> Contato</Link>
             </div>
 
@@ -128,6 +161,42 @@ export default function AeronaveDetalhe() {
             </div>
           </div>
         )}
+
+        {/* Modal/Popup para dados */}
+        {showPopup && (
+          <div className={styles.modalOverlay} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div className={styles.modalContent} style={{ background: '#fff', padding: 24, borderRadius: 12, maxWidth: 400, width: '90%', position: 'relative' }}>
+              <button onClick={() => setShowPopup(false)} style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', cursor: 'pointer' }}>
+                <X size={20} />
+              </button>
+              <h3 style={{ fontSize: '1.2rem', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}><Send size={20} color="var(--accent)" /> Tenho Interesse</h3>
+              <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: 20 }}>Por favor, informe seus dados para que nossa equipe te atenda rapidamente.</p>
+              
+              <form onSubmit={handleSendToWhatsApp}>
+                <div style={{ marginBottom: 16 }}>
+                  <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: 4 }}>Seu Nome *</label>
+                  <div style={{ position: 'relative' }}>
+                    <User size={16} style={{ position: 'absolute', left: 12, top: 12, color: '#999' }} />
+                    <input type="text" required style={{ width: '100%', padding: '10px 10px 10px 36px', border: '1px solid #ddd', borderRadius: 6 }} placeholder="Ex: João da Silva" value={formData.nome} onChange={e => setFormData(f => ({...f, nome: e.target.value}))} />
+                  </div>
+                </div>
+                <div style={{ marginBottom: 24 }}>
+                  <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: 4 }}>Seu E-mail *</label>
+                  <div style={{ position: 'relative' }}>
+                    <Mail size={16} style={{ position: 'absolute', left: 12, top: 12, color: '#999' }} />
+                    <input type="email" required style={{ width: '100%', padding: '10px 10px 10px 36px', border: '1px solid #ddd', borderRadius: 6 }} placeholder="Ex: joao@email.com" value={formData.email} onChange={e => setFormData(f => ({...f, email: e.target.value}))} />
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: 12 }}>
+                  <button type="button" className="btn" style={{ flex: 1, background: '#f5f5f5', color: '#333' }} onClick={() => setShowPopup(false)}>Cancelar</button>
+                  <button type="submit" className="btn btn-accent" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}><Send size={16} /> Enviar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );

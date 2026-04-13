@@ -86,6 +86,7 @@ CREATE TABLE IF NOT EXISTS contatos (
     telefone TEXT,
     mensagem TEXT NOT NULL,
     lido BOOLEAN DEFAULT false,
+    tipo TEXT DEFAULT 'CONTATO',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 

@@ -10,7 +10,8 @@ import AeronaveForm from './pages/AeronaveForm';
 import Categorias from './pages/Categorias';
 import Paginas from './pages/Paginas';
 import Contatos from './pages/Contatos';
-import Configuracoes from './pages/Configuracoes';
+import ConfiguracoesAvionicos from './pages/ConfiguracoesAvionicos';
+import ConfiguracoesAeronaves from './pages/ConfiguracoesAeronaves';
 import ImportXml from './pages/ImportXml';
 import Slides from './pages/Slides';
 
@@ -31,7 +32,8 @@ export default function App() {
             <Route path="/categorias" element={<Categorias />} />
             <Route path="/paginas" element={<Paginas />} />
             <Route path="/contatos" element={<Contatos />} />
-            <Route path="/configuracoes" element={<Configuracoes />} />
+            <Route path="/configuracoes-avionicos" element={<ConfiguracoesAvionicos />} />
+            <Route path="/configuracoes-aeronaves" element={<ConfiguracoesAeronaves />} />
             <Route path="/slides" element={<Slides />} />
             <Route path="/importar" element={<ImportXml />} />
           </Route>

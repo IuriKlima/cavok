@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
 import { useSiteData } from '@/context/SiteContext';
+import { enviarContato } from '@/lib/api';
 import { Trash2, ShoppingCart, Send, ArrowLeft, CheckCircle, Store, X, User, Mail } from 'lucide-react';
 import styles from './page.module.css';
 
@@ -41,6 +42,17 @@ export default function OrcamentoPage() {
     if (sumAmount > 0) {
       message += `\n*Valor de Referência Total:* R$ ${sumAmount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
       message += `\n_(Gostaria de negociar este valor)_`;
+    }
+
+    try {
+      await enviarContato({
+        nome: formData.nome,
+        email: formData.email,
+        mensagem: message,
+        tipo: 'ORCAMENTO'
+      });
+    } catch (e) {
+      console.error('Erro ao salvar orçamento:', e);
     }
 
     const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;

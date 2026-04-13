@@ -100,14 +100,23 @@ function aeronaveFromSnake(data) {
 
 // Dashboard
 export const getDashboard = async () => {
+    const user = getUser();
+    const isAero = user?.role === 'AERONAVES';
+
     const p = await supabase.from('produtos').select('id', { count: 'exact' });
     const a = await supabase.from('aeronaves').select('id', { count: 'exact' });
     const c = await supabase.from('categorias').select('id', { count: 'exact' });
-    const msg = await supabase.from('contatos').select('id', { count: 'exact' }).eq('lido', false);
+    
+    let msgQuery = supabase.from('contatos').select('id', { count: 'exact' }).eq('lido', false);
+    if (isAero) {
+      msgQuery = msgQuery.eq('tipo', 'AERONAVE');
+    }
+    const msg = await msgQuery;
+
     return { 
-      totalProdutos: p.count || 0, 
+      totalProdutos: isAero ? 0 : (p.count || 0), 
       totalAeronaves: a.count || 0,
-      totalCategorias: c.count || 0,
+      totalCategorias: isAero ? 0 : (c.count || 0),
       contatosNaoLidos: msg.count || 0
     };
 };
@@ -203,7 +212,15 @@ export const uploadFiles = async (files) => {
 
 // Contatos (Formulário do site público)
 export const getContatos = async () => {
-  const { data } = await supabase.from('contatos').select('*').order('created_at', { ascending: false });
+  const user = getUser();
+  const isAero = user?.role === 'AERONAVES';
+
+  let query = supabase.from('contatos').select('*').order('created_at', { ascending: false });
+  if (isAero) {
+    query = query.eq('tipo', 'AERONAVE');
+  }
+
+  const { data } = await query;
   return data || [];
 };
 export const marcarContatoLido = async (id) => {

@@ -125,6 +125,7 @@ export async function enviarContato(formData) {
     email: formData.email,
     telefone: formData.telefone || null,
     mensagem: formData.mensagem,
+    tipo: formData.tipo || 'CONTATO',
   });
   if (error) throw new Error(error.message);
   return { success: true };
