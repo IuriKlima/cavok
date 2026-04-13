@@ -11,14 +11,12 @@ __pycache__/
 *.db
 *.sqlite3
 
-# Env — NUNCA commitar segredos
-.env
+# Env — proteger apenas os que podem conter service_role keys
+# Os .env base (anon key publica) sao commitados para o build funcionar
 .env.local
 .env.production
 .env.development
 .env*.local
-frontend/.env*
-admin/.env*
 
 # Logs
 *.log
