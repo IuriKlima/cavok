@@ -4,18 +4,27 @@ import { createClient } from '@supabase/supabase-js';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Supabase credentials missing in environment variables.');
+function getSupabase() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) return null;
+  return createClient(url, key);
 }
 
-const supabase = createClient(supabaseUrl, supabaseKey);
-
 export async function GET() {
+  const supabase = getSupabase();
+
+  if (!supabase) {
+    return Response.json({
+      config: {},
+      categoriasProduto: [],
+      categoriasAeronave: [],
+      categorias: [],
+      slides: [],
+    }, { status: 503 });
+  }
+
   try {
-    // Buscar tudo em paralelo
     const [configRes, catProdRes, catAeroRes, slidesRes] = await Promise.all([
       supabase.from('configuracoes').select('*'),
       supabase.from('categorias').select('*').eq('tipo', 'PRODUTO').order('ordem', { ascending: true }),
@@ -23,7 +32,6 @@ export async function GET() {
       supabase.from('slides').select('*').eq('ativo', true).order('ordem', { ascending: true }),
     ]);
 
-    // Mapear configurações para objeto chave: valor
     const config = {};
     if (configRes.data) {
       configRes.data.forEach(c => { config[c.chave] = c.valor; });
