@@ -102,3 +102,78 @@
 .productCard:hover .cta {
   color: var(--accent);
 }
+
+/* ====== Responsive ====== */
+@media (max-width: 768px) {
+  .image {
+    padding: 10px;
+  }
+
+  .info {
+    padding: 10px;
+  }
+
+  .category {
+    font-size: 0.68rem;
+    margin-bottom: 4px;
+  }
+
+  .name {
+    font-size: 0.82rem;
+    margin-bottom: 2px;
+  }
+
+  .sku {
+    font-size: 0.7rem;
+    margin-bottom: 8px;
+  }
+
+  .footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding-top: 8px;
+  }
+
+  .price {
+    font-size: 0.92rem;
+  }
+
+  .consulte {
+    font-size: 0.78rem;
+  }
+
+  .cta {
+    font-size: 0.72rem;
+  }
+
+  .badge, .badgeDestaque {
+    top: 6px;
+    left: 6px;
+    font-size: 0.65rem;
+    padding: 2px 8px;
+  }
+
+  .badgeDestaque {
+    left: auto;
+    right: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .image {
+    padding: 8px;
+  }
+
+  .info {
+    padding: 8px;
+  }
+
+  .name {
+    font-size: 0.76rem;
+  }
+
+  .price {
+    font-size: 0.85rem;
+  }
+}

@@ -1,5 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
 
+// Impedir cache — sempre buscar dados frescos do Supabase
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://ynpzkzkypusjxwdfpaxv.supabase.co',
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlucHpremt5cHVzanh3ZGZwYXh2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMTg3NDIsImV4cCI6MjA5MTU5NDc0Mn0.VvCnUfGqyE0it3dqagi5pCTJ4qhD_98p1TjYjnQovu0'

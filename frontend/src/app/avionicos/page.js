@@ -73,7 +73,7 @@ function AvionicosContent() {
             <div className={styles.loading}>Carregando...</div>
           ) : produtos.length > 0 ? (
             <>
-              <div className={`grid grid-3 ${styles.productsGrid}`}>
+              <div className={styles.productsGrid}>
                 {produtos.map((produto) => (<ProductCard key={produto.id} produto={produto} />))}
               </div>
               {totalPages > 1 && (
