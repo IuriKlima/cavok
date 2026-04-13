@@ -18,6 +18,7 @@ export default function Configuracoes() {
     logo_avionicos: 'Logo Aviônicos', logo_aeronaves: 'Logo Aeronaves',
     aeronaves_hero_titulo: 'Título Hero Aeronaves', aeronaves_hero_subtitulo: 'Subtítulo Hero Aeronaves',
     aeronaves_hero_imagem: 'Imagem Hero Aeronaves',
+    aeronaves_telefone: 'Telefone (Aeronaves)', aeronaves_email: 'Email (Aeronaves)', aeronaves_whatsapp: 'WhatsApp Nº (Aeronaves)',
   };
 
   useEffect(() => {
@@ -66,7 +67,8 @@ export default function Configuracoes() {
   const imageKeys = ['logo_avionicos', 'logo_aeronaves', 'aeronaves_hero_imagem'];
 
   const sections = [
-    { title: '📱 Contato e Redes', keys: ['telefone', 'email', 'whatsapp', 'endereco', 'instagram', 'facebook'] },
+    { title: '📱 Contato (Geral / Aviônicos)', keys: ['telefone', 'email', 'whatsapp', 'endereco', 'instagram', 'facebook'] },
+    { title: '✈️ Contato (Aeronaves)', keys: ['aeronaves_telefone', 'aeronaves_email', 'aeronaves_whatsapp'] },
     { title: '🌐 Site', keys: ['site_nome', 'site_descricao'] },
     { title: '🎨 Logos', keys: ['logo_avionicos', 'logo_aeronaves'] },
     { title: '🏠 Página Inicial (Aviônicos)', keys: ['hero_titulo', 'hero_subtitulo'] },

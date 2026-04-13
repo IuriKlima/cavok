@@ -1,11 +1,14 @@
 'use client';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useSiteData } from '@/context/SiteContext';
 import { Phone, Mail, MessageCircle } from 'lucide-react';
 import styles from './Footer.module.css';
 
 export default function Footer() {
   const { categoriasProduto = [], config = {} } = useSiteData();
+  const pathname = usePathname();
+  const isAeronaves = pathname.startsWith('/aeronaves');
 
   return (
     <footer className={styles.footer}>
@@ -48,9 +51,15 @@ export default function Footer() {
         <div className={styles.footerCol}>
           <h4 className={styles.footerTitle}>Contato</h4>
           <div className={styles.contactInfo}>
-            <a href={`tel:+55${config.whatsapp || '19983296170'}`}><Phone size={16} style={{marginRight: '8px', verticalAlign: 'middle'}}/> {config.telefone || '(19) 98329-6170'}</a>
-            <a href={`mailto:${config.email || 'orcamento@cavokavionics.com.br'}`}><Mail size={16} style={{marginRight: '8px', verticalAlign: 'middle'}}/> {config.email || 'orcamento@cavokavionics.com.br'}</a>
-            <a href={`https://wa.me/${config.whatsapp || '5519983296170'}`} target="_blank" rel="noopener"><MessageCircle size={16} style={{marginRight: '8px', verticalAlign: 'middle'}}/> WhatsApp</a>
+            <a href={`tel:+55${isAeronaves ? config.aeronaves_whatsapp || config.whatsapp || '19983296170' : config.whatsapp || '19983296170'}`}>
+              <Phone size={16} style={{marginRight: '8px', verticalAlign: 'middle'}}/> {isAeronaves ? config.aeronaves_telefone || config.telefone || '(19) 98329-6170' : config.telefone || '(19) 98329-6170'}
+            </a>
+            <a href={`mailto:${isAeronaves ? config.aeronaves_email || config.email || 'orcamento@cavokavionics.com.br' : config.email || 'orcamento@cavokavionics.com.br'}`}>
+              <Mail size={16} style={{marginRight: '8px', verticalAlign: 'middle'}}/> {isAeronaves ? config.aeronaves_email || config.email || 'orcamento@cavokavionics.com.br' : config.email || 'orcamento@cavokavionics.com.br'}
+            </a>
+            <a href={`https://wa.me/${isAeronaves ? config.aeronaves_whatsapp || config.whatsapp || '5519983296170' : config.whatsapp || '5519983296170'}`} target="_blank" rel="noopener">
+              <MessageCircle size={16} style={{marginRight: '8px', verticalAlign: 'middle'}}/> WhatsApp
+            </a>
           </div>
         </div>
       </div>

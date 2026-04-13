@@ -256,10 +256,27 @@
   align-self: center;
 }
 
-/* Aeronave link */
+/* Aeronave link - Orange Button inside Nav */
 .catLinkAeronave {
-  color: var(--accent, #E14D2A);
+  background: var(--accent) !important;
+  color: var(--white) !important;
   font-weight: 600;
+  padding: 8px 16px !important;
+  border-radius: var(--radius-md) !important;
+  margin-left: 12px;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(225, 77, 42, 0.3);
+}
+
+.catLinkAeronave:hover {
+  background: var(--accent-dark) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(225, 77, 42, 0.4);
+}
+
+.catLinkAeronave::after {
+  display: none !important;
 }
 
 /* Cart Icon */

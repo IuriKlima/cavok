@@ -46,8 +46,12 @@ export default function Header() {
             <Link href="/aeronaves" className={isAeronaves ? styles.topLinkActive : styles.topLinkAccent} style={{ background: isAeronaves ? 'rgba(255,255,255,0.15)' : 'transparent' }}><PlaneTakeoff size={14} className={styles.iconSpaced} /> Aeronaves à venda</Link>
           </div>
           <div className={styles.topContact}>
-            <a href={`tel:+55${config.whatsapp || '19983296170'}`}><Phone size={14} className={styles.iconSpaced}/> {config.telefone || '(19) 98329-6170'}</a>
-            <a href={`mailto:${config.email || 'orcamento@cavokavionics.com.br'}`}><Mail size={14} className={styles.iconSpaced}/> {config.email || 'orcamento@cavokavionics.com.br'}</a>
+            <a href={`tel:+55${isAeronaves ? config.aeronaves_whatsapp || config.whatsapp || '19983296170' : config.whatsapp || '19983296170'}`}>
+              <Phone size={14} className={styles.iconSpaced}/> {isAeronaves ? config.aeronaves_telefone || config.telefone || '(19) 98329-6170' : config.telefone || '(19) 98329-6170'}
+            </a>
+            <a href={`mailto:${isAeronaves ? config.aeronaves_email || config.email || 'orcamento@cavokavionics.com.br' : config.email || 'orcamento@cavokavionics.com.br'}`}>
+              <Mail size={14} className={styles.iconSpaced}/> {isAeronaves ? config.aeronaves_email || config.email || 'orcamento@cavokavionics.com.br' : config.email || 'orcamento@cavokavionics.com.br'}
+            </a>
           </div>
         </div>
       </div>
