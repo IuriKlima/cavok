@@ -12,8 +12,14 @@ export default function Footer() {
       <div className={`container ${styles.footerGrid}`}>
         <div className={styles.footerCol}>
           <div className={styles.footerLogo}>
-            <span className={styles.logoName}>CAVOK</span>
-            <span className={styles.logoSub}>AVIONICS</span>
+            {config.logo_avionicos ? (
+              <img src={config.logo_avionicos} alt={config.site_nome || 'Cavok Avionics'} style={{ maxHeight: 40, width: 'auto', objectFit: 'contain' }} />
+            ) : (
+              <>
+                <span className={styles.logoName}>CAVOK</span>
+                <span className={styles.logoSub}>AVIONICS</span>
+              </>
+            )}
           </div>
           <p className={styles.footerDesc}>
             {config.site_descricao || 'Sua parceira completa em aviação. Oferecemos aviônicos e aeronaves novas e seminovas.'}

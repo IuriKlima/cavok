@@ -9,6 +9,7 @@ export function SiteProvider({ children }) {
     categoriasProduto: [],
     categoriasAeronave: [],
     categorias: [],
+    slides: [],
     loaded: false,
   });
 

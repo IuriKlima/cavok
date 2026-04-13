@@ -2,20 +2,27 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { getProduto } from '@/lib/api';
-import { Camera, CheckCircle, MessageCircle, Mail, ShieldCheck, Truck, Wrench } from 'lucide-react';
+import { getProduto, getProdutosRelacionados } from '@/lib/api';
+import { useCart } from '@/context/CartContext';
+import ProductCard from '@/components/ProductCard/ProductCard';
+import { Camera, CheckCircle, ShoppingCart, Check, Mail, ShieldCheck, Truck, Wrench } from 'lucide-react';
 import styles from './page.module.css';
 
 export default function ProdutoDetalhe() {
   const params = useParams();
   const slug = params.slug;
+  const { addToCart, cartItems } = useCart();
   const [produto, setProduto] = useState(null);
+  const [relacionados, setRelacionados] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getProduto(slug).then(data => {
       setProduto(data);
       setLoading(false);
+    });
+    getProdutosRelacionados(slug).then(data => {
+      if (data) setRelacionados(data);
     });
   }, [slug]);
 
@@ -74,15 +81,19 @@ export default function ProdutoDetalhe() {
             </div>
 
             <div className={styles.actions}>
-              <a
-                href={`https://wa.me/5519983296170?text=Olá! Gostaria de um orçamento para: ${produto.nome}${produto.sku ? ` (SKU: ${produto.sku})` : ''}`}
-                target="_blank"
-                rel="noopener"
-                className="btn btn-accent btn-lg"
-                style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-              >
-                <MessageCircle size={20}/> Pedir Cotação
-              </a>
+              {cartItems.some(i => i.id === produto.id) ? (
+                <Link href="/orcamento" className="btn btn-success btn-lg" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                  <Check size={20}/> Ver no Orçamento
+                </Link>
+              ) : (
+                <button
+                  onClick={() => addToCart(produto)}
+                  className="btn btn-accent btn-lg"
+                  style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                >
+                  <ShoppingCart size={20}/> Adicionar ao Orçamento
+                </button>
+              )}
               <Link href="/contato" className="btn btn-outline btn-lg" style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
                 <Mail size={20}/> Contato
               </Link>
@@ -100,6 +111,15 @@ export default function ProdutoDetalhe() {
           <div className={styles.descSection}>
             <h2 className={styles.descTitle}>Descrição do Produto</h2>
             <div className={styles.descContent} dangerouslySetInnerHTML={{ __html: produto.descricao }} />
+          </div>
+        )}
+
+        {relacionados.length > 0 && (
+          <div className={styles.descSection}>
+            <h2 className={styles.descTitle}>Produtos Relacionados</h2>
+            <div className="grid grid-4" style={{ gap: 20, marginTop: 20 }}>
+              {relacionados.map(p => <ProductCard key={p.id} produto={p} />)}
+            </div>
           </div>
         )}
       </div>

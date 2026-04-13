@@ -31,6 +31,11 @@ async def seed_data():
             ("sobre_texto", "Atuamos com venda de aviônicos e aeronaves, oferecendo produtos de qualidade com procedência garantida.", "textarea"),
             ("contato_titulo", "Entre em Contato", "text"),
             ("contato_texto", "Estamos prontos para atender você", "text"),
+            ("logo_avionicos", "", "image"),
+            ("logo_aeronaves", "", "image"),
+            ("aeronaves_hero_titulo", "Encontre sua próxima aeronave", "text"),
+            ("aeronaves_hero_subtitulo", "Aeronaves selecionadas com procedência garantida", "text"),
+            ("aeronaves_hero_imagem", "", "image"),
         ]
         for chave, valor, tipo in configs:
             r = await db.execute(select(Configuracao).where(Configuracao.chave == chave))

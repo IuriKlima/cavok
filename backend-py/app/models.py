@@ -124,6 +124,18 @@ class Configuracao(Base):
     valor = Column(Text)
     tipo = Column(String(50))
 
+class Slide(Base):
+    __tablename__ = "slides"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    titulo = Column(String(500))
+    subtitulo = Column(String(500))
+    imagem_url = Column(String(500))
+    link = Column(String(500))
+    texto_botao = Column(String(200))
+    ordem = Column(Integer, default=0)
+    ativo = Column(Boolean, default=True)
+    criado_em = Column(DateTime, default=datetime.utcnow)
+
 class Usuario(Base):
     __tablename__ = "usuarios"
     id = Column(Integer, primary_key=True, autoincrement=True)

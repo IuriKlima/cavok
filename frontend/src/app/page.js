@@ -2,13 +2,14 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import ProductCard from '@/components/ProductCard/ProductCard';
+import HeroSlider from '@/components/HeroSlider/HeroSlider';
 import { useSiteData } from '@/context/SiteContext';
 import { getProdutos, getAeronaves } from '@/lib/api';
 import { Plane, ShieldCheck, Truck, Wrench, CheckCircle, PlaneTakeoff, MessageCircle, Mail } from 'lucide-react';
 import styles from './page.module.css';
 
 export default function Home() {
-  const { config = {} } = useSiteData();
+  const { config = {}, slides = [] } = useSiteData();
   const [produtos, setProdutos] = useState([]);
   const [aeronaves, setAeronaves] = useState([]);
 
@@ -19,19 +20,7 @@ export default function Home() {
 
   return (
     <>
-      <section className={styles.hero}>
-        <div className="container">
-          <div className={styles.heroContent}>
-            <span className={styles.heroBadge}><Plane size={16} /> {config.site_nome || 'Cavok Avionics'}</span>
-            <h1 className={styles.heroTitle}>{config.hero_titulo || 'Aviônicos e Aeronaves com Qualidade e Procedência'}</h1>
-            <p className={styles.heroDesc}>{config.hero_subtitulo || 'Venda de aviônicos novos e usados, aeronaves selecionadas.'}</p>
-            <div className={styles.heroActions}>
-              <Link href="/avionicos" className="btn btn-accent btn-lg">Ver Aviônicos</Link>
-              <Link href="/aeronaves" className="btn btn-outline btn-lg">Ver Aeronaves</Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HeroSlider slides={slides} config={config} />
 
       <section className={styles.trust}>
         <div className="container">

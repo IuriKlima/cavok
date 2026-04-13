@@ -42,6 +42,16 @@ async def por_slug(slug: str, db: AsyncSession = Depends(get_db)):
     if not a: raise HTTPException(404)
     return aeronave_to_dict(a)
 
+@public_router.get("/{slug}/relacionados")
+async def relacionados(slug: str, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(Aeronave).where(Aeronave.slug == slug))
+    a = result.scalar_one_or_none()
+    if not a: return []
+    if not a.categoria_id: return []
+    q = select(Aeronave).where(Aeronave.categoria_id == a.categoria_id, Aeronave.id != a.id, Aeronave.status != "INATIVA").limit(4)
+    result = await db.execute(q)
+    return [aeronave_to_dict(r) for r in result.scalars().all()]
+
 class AeronaveRequest(BaseModel):
     nome: str; slug: Optional[str] = None; descricao: Optional[str] = None
     assentos: Optional[str] = None; horasCelula: Optional[str] = None; anoFabricacao: Optional[str] = None

@@ -1,32 +1,49 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useSiteData } from '@/context/SiteContext';
-import { Phone, Mail, MessageCircle, Menu, X, Search, ChevronDown, Plane, PlaneTakeoff } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
+import { Phone, Mail, MessageCircle, Menu, X, Search, ChevronDown, Plane, PlaneTakeoff, ShoppingCart } from 'lucide-react';
 import styles from './Header.module.css';
 
 export default function Header() {
-  const { categoriasProduto = [], config = {} } = useSiteData();
+  const { categoriasProduto = [], categoriasAeronave = [], config = {} } = useSiteData();
+  const { cartCount, loaded } = useCart();
   const [searchQuery, setSearchQuery] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  const isAeronaves = pathname.startsWith('/aeronaves');
 
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      window.location.href = `/avionicos?q=${encodeURIComponent(searchQuery.trim())}`;
+      if (isAeronaves) {
+        window.location.href = `/aeronaves?q=${encodeURIComponent(searchQuery.trim())}`;
+      } else {
+        window.location.href = `/avionicos?q=${encodeURIComponent(searchQuery.trim())}`;
+      }
     }
   };
 
-  const mainCats = categoriasProduto.slice(0, 6);
-  const moreCats = categoriasProduto.slice(6);
+  // Categorias de Aviônicos
+  const avionicosMainCats = categoriasProduto.slice(0, 5);
+  const avionicosMoreCats = categoriasProduto.slice(5);
+
+  // Categorias de Aeronaves
+  const aeronavesMainCats = categoriasAeronave.slice(0, 5);
+  const aeronavesMoreCats = categoriasAeronave.slice(5);
+
+  const logoSrc = isAeronaves ? config.logo_aeronaves : config.logo_avionicos;
 
   return (
     <header className={styles.header}>
       <div className={styles.topBar}>
         <div className={`container ${styles.topBarInner}`}>
           <div className={styles.topLinks}>
-            <Link href="/avionicos" className={styles.topLinkActive}><Plane size={14} className={styles.iconSpaced} /> Aviônicos</Link>
-            <Link href="/aeronaves" className={styles.topLinkAccent}><PlaneTakeoff size={14} className={styles.iconSpaced} /> Aeronaves à venda</Link>
+            <Link href="/avionicos" className={!isAeronaves && pathname !== '/' ? styles.topLinkActive : styles.topLinkAccent} style={{ background: !isAeronaves && pathname !== '/' ? 'rgba(255,255,255,0.15)' : 'transparent' }}><Plane size={14} className={styles.iconSpaced} /> Aviônicos</Link>
+            <Link href="/aeronaves" className={isAeronaves ? styles.topLinkActive : styles.topLinkAccent} style={{ background: isAeronaves ? 'rgba(255,255,255,0.15)' : 'transparent' }}><PlaneTakeoff size={14} className={styles.iconSpaced} /> Aeronaves à venda</Link>
           </div>
           <div className={styles.topContact}>
             <a href={`tel:+55${config.whatsapp || '19983296170'}`}><Phone size={14} className={styles.iconSpaced}/> {config.telefone || '(19) 98329-6170'}</a>
@@ -38,23 +55,37 @@ export default function Header() {
       <div className={styles.mainHeader}>
         <div className={`container ${styles.mainHeaderInner}`}>
           <Link href="/" className={styles.logo}>
-            <div className={styles.logoIcon}>
-              <svg width="40" height="32" viewBox="0 0 40 32" fill="none">
-                <path d="M20 0L40 24H30L20 12L10 24H0L20 0Z" fill="var(--accent)"/>
-                <path d="M10 28H30V32H10V28Z" fill="var(--primary)"/>
-              </svg>
-            </div>
-            <div className={styles.logoText}>
-              <span className={styles.logoName}>CAVOK</span>
-              <span className={styles.logoSub}>AVIONICS</span>
-            </div>
+            {logoSrc ? (
+              <img src={logoSrc} alt={config.site_nome || 'Cavok Avionics'} className={styles.logoImg} />
+            ) : (
+              <>
+                <div className={styles.logoIcon}>
+                  <svg width="40" height="32" viewBox="0 0 40 32" fill="none">
+                    <path d="M20 0L40 24H30L20 12L10 24H0L20 0Z" fill="var(--accent)"/>
+                    <path d="M10 28H30V32H10V28Z" fill="var(--primary)"/>
+                  </svg>
+                </div>
+                <div className={styles.logoText}>
+                  <span className={styles.logoName}>CAVOK</span>
+                  <span className={styles.logoSub}>{isAeronaves ? 'AERONAVES' : 'AVIONICS'}</span>
+                </div>
+              </>
+            )}
           </Link>
 
           <form className={styles.searchBar} onSubmit={handleSearch}>
-            <input type="text" placeholder="Procure por produtos..." value={searchQuery}
+            <input type="text" placeholder={isAeronaves ? "Procure por aeronaves..." : "Procure por aviônicos..."} value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)} className={styles.searchInput} />
             <button type="submit" className={styles.searchBtn}><Search size={18} /></button>
           </form>
+
+          {!isAeronaves && (
+            <Link href="/orcamento" className={styles.cartIcon}>
+              <ShoppingCart size={24} />
+              {loaded && cartCount > 0 && <span className={styles.cartBadge}>{cartCount}</span>}
+              <span className={styles.cartLabel}>Orçamentos</span>
+            </Link>
+          )}
 
           <button className={styles.mobileMenuBtn} onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -64,20 +95,74 @@ export default function Header() {
 
       <nav className={`${styles.catNav} ${menuOpen ? styles.catNavOpen : ''}`}>
         <div className={`container ${styles.catNavInner}`}>
-          {mainCats.map((cat) => (
-            <Link key={cat.slug} href={`/avionicos?categoria=${cat.slug}`} className={styles.catLink}>
-              {cat.nome}
-            </Link>
-          ))}
-          {moreCats.length > 0 && (
-            <div className={styles.catDropdown}>
-              <span className={styles.catLink}>Outros <ChevronDown size={14} style={{marginLeft: '4px', verticalAlign: 'middle'}}/></span>
-              <div className={styles.catDropdownMenu}>
-                {moreCats.map((cat) => (
-                  <Link key={cat.slug} href={`/avionicos?categoria=${cat.slug}`}>{cat.nome}</Link>
-                ))}
+          {!isAeronaves ? (
+            // ==================== NAV DE AVIÔNICOS ====================
+            <>
+              {avionicosMainCats.map((cat) => (
+                <Link key={cat.slug} href={`/avionicos?categoria=${cat.slug}`} className={styles.catLink}>
+                  {cat.nome}
+                </Link>
+              ))}
+              {avionicosMoreCats.length > 0 && (
+                <div className={styles.catDropdown}>
+                  <span className={styles.catLink}>Outros <ChevronDown size={14} style={{marginLeft: '4px', verticalAlign: 'middle'}}/></span>
+                  <div className={styles.catDropdownMenu}>
+                    {avionicosMoreCats.map((cat) => (
+                      <Link key={cat.slug} href={`/avionicos?categoria=${cat.slug}`}>{cat.nome}</Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className={styles.catSeparator} />
+
+              <div className={styles.catDropdown}>
+                <span className={`${styles.catLink} ${styles.catLinkAeronave}`}>
+                  <PlaneTakeoff size={14} style={{ marginRight: '4px', verticalAlign: 'middle' }} />
+                  Ir para Aeronaves <ChevronDown size={14} style={{marginLeft: '4px', verticalAlign: 'middle'}}/>
+                </span>
+                <div className={styles.catDropdownMenu}>
+                  <Link href="/aeronaves">Todas as Aeronaves</Link>
+                  {categoriasAeronave.map((cat) => (
+                    <Link key={cat.slug} href={`/aeronaves?categoria=${cat.slug}`}>{cat.nome}</Link>
+                  ))}
+                </div>
               </div>
-            </div>
+            </>
+          ) : (
+            // ==================== NAV DE AERONAVES ====================
+            <>
+              {aeronavesMainCats.map((cat) => (
+                <Link key={cat.slug} href={`/aeronaves?categoria=${cat.slug}`} className={styles.catLink}>
+                  {cat.nome}
+                </Link>
+              ))}
+              {aeronavesMoreCats.length > 0 && (
+                <div className={styles.catDropdown}>
+                  <span className={styles.catLink}>Outros <ChevronDown size={14} style={{marginLeft: '4px', verticalAlign: 'middle'}}/></span>
+                  <div className={styles.catDropdownMenu}>
+                    {aeronavesMoreCats.map((cat) => (
+                      <Link key={cat.slug} href={`/aeronaves?categoria=${cat.slug}`}>{cat.nome}</Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className={styles.catSeparator} />
+
+              <div className={styles.catDropdown}>
+                <span className={`${styles.catLink} ${styles.catLinkAeronave}`}>
+                  <Plane size={14} style={{ marginRight: '4px', verticalAlign: 'middle' }} />
+                  Voltar para Aviônicos <ChevronDown size={14} style={{marginLeft: '4px', verticalAlign: 'middle'}}/>
+                </span>
+                <div className={styles.catDropdownMenu}>
+                  <Link href="/avionicos">Todos os Aviônicos</Link>
+                  {categoriasProduto.map((cat) => (
+                    <Link key={cat.slug} href={`/avionicos?categoria=${cat.slug}`}>{cat.nome}</Link>
+                  ))}
+                </div>
+              </div>
+            </>
           )}
         </div>
       </nav>

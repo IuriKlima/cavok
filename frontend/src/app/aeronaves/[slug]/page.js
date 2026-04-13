@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { getAeronave } from '@/lib/api';
+import { getAeronave, getAeronavesRelacionadas } from '@/lib/api';
 import { Plane, CheckCircle, XCircle, MessageCircle, Mail, FileText, Search, Handshake } from 'lucide-react';
 import styles from './page.module.css';
 
@@ -10,6 +10,7 @@ export default function AeronaveDetalhe() {
   const params = useParams();
   const slug = params.slug;
   const [aeronave, setAeronave] = useState(null);
+  const [relacionadas, setRelacionadas] = useState([]);
   const [activeImage, setActiveImage] = useState(0);
   const [loading, setLoading] = useState(true);
 
@@ -17,6 +18,9 @@ export default function AeronaveDetalhe() {
     getAeronave(slug).then(data => {
       setAeronave(data);
       setLoading(false);
+    });
+    getAeronavesRelacionadas(slug).then(data => {
+      if (data) setRelacionadas(data);
     });
   }, [slug]);
 
@@ -102,6 +106,26 @@ export default function AeronaveDetalhe() {
           <div className={styles.descSection}>
             <h2 className={styles.descTitle}>Especificações Técnicas</h2>
             <div className={styles.descContent} dangerouslySetInnerHTML={{ __html: aeronave.especificacoes }} />
+          </div>
+        )}
+
+        {relacionadas.length > 0 && (
+          <div className={styles.descSection}>
+            <h2 className={styles.descTitle}>Aeronaves Relacionadas</h2>
+            <div className="grid grid-2" style={{ gap: 20, marginTop: 20 }}>
+              {relacionadas.map(a => (
+                <Link key={a.id} href={`/aeronaves/${a.slug}`} className="card" style={{ overflow: 'hidden', textDecoration: 'none' }}>
+                  <div style={{ height: 200, background: 'var(--bg-tertiary)' }}>
+                    {a.imagemPrincipal ? <img src={a.imagemPrincipal} alt={a.nome} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}><Plane size={48} color="rgba(255,255,255,0.2)"/></div>}
+                  </div>
+                  <div style={{ padding: 16 }}>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--accent)', fontWeight: 600 }}>{a.categoria?.nome || 'Aeronave'}</span>
+                    <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text)', marginTop: 4 }}>{a.nome}</h3>
+                    {a.anoFabricacao && <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Ano: {a.anoFabricacao}</span>}
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
         )}
       </div>

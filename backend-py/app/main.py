@@ -9,7 +9,7 @@ import os, time, json
 
 from .database import engine, Base, get_db
 from .models import *
-from .routes import auth, produtos, aeronaves, categorias, marcas, paginas, contatos, configuracoes, upload, importar, dashboard
+from .routes import auth, produtos, aeronaves, categorias, marcas, paginas, contatos, configuracoes, upload, importar, dashboard, slides
 from .seed import seed_data
 
 # In-memory cache for public data
@@ -46,6 +46,7 @@ app.include_router(marcas.public_router, prefix="/api/marcas", tags=["Marcas"])
 app.include_router(paginas.public_router, prefix="/api/paginas", tags=["Páginas"])
 app.include_router(configuracoes.public_router, prefix="/api/configuracoes", tags=["Configurações"])
 app.include_router(contatos.public_router, prefix="/api/contato", tags=["Contato"])
+app.include_router(slides.public_router, prefix="/api/slides", tags=["Slides"])
 
 # Rotas admin
 app.include_router(auth.router, prefix="/api/admin/auth", tags=["Auth"])
@@ -58,6 +59,7 @@ app.include_router(configuracoes.admin_router, prefix="/api/admin/configuracoes"
 app.include_router(contatos.admin_router, prefix="/api/admin/contatos", tags=["Admin Contatos"])
 app.include_router(upload.router, prefix="/api/admin/upload", tags=["Upload"])
 app.include_router(importar.router, prefix="/api/admin/import", tags=["Import"])
+app.include_router(slides.admin_router, prefix="/api/admin/slides", tags=["Admin Slides"])
 
 # Endpoint combinado - 1 chamada ao invés de 4
 @app.get("/api/site-data", tags=["Site"])
@@ -71,12 +73,16 @@ async def site_data(db: AsyncSession = Depends(get_db)):
     
     conf_result = await db.execute(select(Configuracao))
     conf = {c.chave: (c.valor or "") for c in conf_result.scalars().all()}
+
+    slides_result = await db.execute(select(Slide).where(Slide.ativo == True).order_by(Slide.ordem))
+    slides_list = [{"id": s.id, "titulo": s.titulo, "subtitulo": s.subtitulo, "imagemUrl": s.imagem_url, "link": s.link, "textoBotao": s.texto_botao, "ordem": s.ordem} for s in slides_result.scalars().all()]
     
     data = {
         "categorias": cats,
         "categoriasProduto": [c for c in cats if c["tipo"] == "PRODUTO"],
         "categoriasAeronave": [c for c in cats if c["tipo"] == "AERONAVE"],
         "config": conf,
+        "slides": slides_list,
     }
     _cache["site_data"] = {"data": data, "ts": now}
     return JSONResponse(content=data, headers={"Cache-Control": "public, max-age=60"})

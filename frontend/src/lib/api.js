@@ -36,6 +36,10 @@ export async function getProduto(slug) {
   return fetchApi(`/api/produtos/${slug}`);
 }
 
+export async function getProdutosRelacionados(slug) {
+  return fetchApi(`/api/produtos/${slug}/relacionados`);
+}
+
 export async function buscarProdutos(q, page = 0) {
   return fetchApi(`/api/produtos/busca?q=${encodeURIComponent(q)}&page=${page}`);
 }
@@ -55,6 +59,10 @@ export async function getAeronave(slug) {
   return fetchApi(`/api/aeronaves/${slug}`);
 }
 
+export async function getAeronavesRelacionadas(slug) {
+  return fetchApi(`/api/aeronaves/${slug}/relacionados`);
+}
+
 // ====== Categorias ======
 export async function getCategorias(tipo) {
   const params = tipo ? `?tipo=${tipo}` : '';
@@ -69,6 +77,11 @@ export async function getMarcas() {
 // ====== Configurações ======
 export async function getConfiguracoes() {
   return fetchApi('/api/configuracoes');
+}
+
+// ====== Slides ======
+export async function getSlides() {
+  return fetchApi('/api/slides');
 }
 
 // ====== Contato ======

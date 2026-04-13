@@ -56,6 +56,16 @@ async def por_slug(slug: str, db: AsyncSession = Depends(get_db)):
     if not p: raise HTTPException(404, "Produto não encontrado")
     return produto_to_dict(p)
 
+@public_router.get("/{slug}/relacionados")
+async def relacionados(slug: str, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(Produto).where(Produto.slug == slug))
+    p = result.scalar_one_or_none()
+    if not p: return []
+    if not p.categoria_id: return []
+    q = select(Produto).where(Produto.categoria_id == p.categoria_id, Produto.id != p.id, Produto.status == "ATIVO").limit(4)
+    result = await db.execute(q)
+    return [produto_to_dict(r) for r in result.scalars().all()]
+
 # ====== ADMIN ======
 class ProdutoRequest(BaseModel):
     nome: str
@@ -105,11 +115,12 @@ async def admin_atualizar(id: int, req: ProdutoRequest, db: AsyncSession = Depen
     p = await db.get(Produto, id)
     if not p: raise HTTPException(404)
     p.nome = req.nome; p.slug = req.slug or make_slug(req.nome); p.descricao = req.descricao
-    p.descricao_curta = req.descricaoCurta; p.preco = req.preco; p.sku = req.sku
+    p.descricao_curta = req.descricaoCurta; p.preco = req.preco; p.sku = req.sku or ""
     p.imagem_principal = req.imagemPrincipal; p.imagens = json.dumps(req.imagens or [])
-    p.homologado = req.homologado; p.condicao = req.condicao; p.status = req.status
+    p.homologado = req.homologado; p.condicao = req.condicao; p.status = req.status or "ATIVO"
     p.destaque = req.destaque; p.categoria_id = req.categoriaId; p.marca_id = req.marcaId
     await db.commit()
+    await db.refresh(p)
     return produto_to_dict(p)
 
 @admin_router.delete("/{id}")

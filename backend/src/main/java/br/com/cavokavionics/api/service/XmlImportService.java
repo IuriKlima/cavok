@@ -13,6 +13,8 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.*;
 
+import org.springframework.transaction.annotation.Transactional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -23,6 +25,7 @@ public class XmlImportService {
     private final CategoriaRepository categoriaRepository;
     private final MarcaRepository marcaRepository;
 
+    @Transactional(rollbackFor = Exception.class)
     public Map<String, Object> importarXml(InputStream xmlInputStream) {
         int produtosImportados = 0;
         int aeronavesImportadas = 0;

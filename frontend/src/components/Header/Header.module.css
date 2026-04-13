@@ -234,6 +234,76 @@
   color: var(--primary);
 }
 
+/* Logo image */
+.logoImg {
+  max-height: 44px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Icon spacing */
+.iconSpaced {
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+/* Separator */
+.catSeparator {
+  width: 1px;
+  height: 20px;
+  background: rgba(255,255,255,0.2);
+  margin: 0 4px;
+  align-self: center;
+}
+
+/* Aeronave link */
+.catLinkAeronave {
+  color: var(--accent, #E14D2A);
+  font-weight: 600;
+}
+
+/* Cart Icon */
+.cartIcon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transition);
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--gray-200);
+}
+
+.cartIcon:hover {
+  background: var(--primary-50);
+  border-color: var(--primary-200);
+}
+
+.cartBadge {
+  position: absolute;
+  top: -6px;
+  left: -8px;
+  background: var(--accent);
+  color: var(--white);
+  font-size: 0.7rem;
+  font-weight: 800;
+  min-width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 2px solid var(--white);
+  padding: 0 4px;
+}
+
+.cartLabel {
+  font-size: 0.9rem;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .topContact { display: none; }

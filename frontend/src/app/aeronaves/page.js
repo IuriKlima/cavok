@@ -7,7 +7,7 @@ import { Plane, PlaneTakeoff, CheckCircle } from 'lucide-react';
 import styles from './page.module.css';
 
 export default function AeronavesPage() {
-  const { categoriasAeronave = [] } = useSiteData();
+  const { categoriasAeronave = [], config = {} } = useSiteData();
   const allCats = [{ id: null, nome: 'Todos', slug: '' }, ...categoriasAeronave];
   const [activeCategory, setActiveCategory] = useState('');
   const [aeronaves, setAeronaves] = useState([]);
@@ -24,11 +24,12 @@ export default function AeronavesPage() {
 
   return (
     <div className={styles.page}>
-      <section className={styles.hero}>
-        <div className="container">
+      <section className={styles.hero} style={config.aeronaves_hero_imagem ? { backgroundImage: `url(${config.aeronaves_hero_imagem})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}>
+        <div className={styles.heroOverlay} />
+        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
           <span className={styles.heroBadge} style={{display: 'inline-flex', alignItems: 'center', gap: '6px'}}><PlaneTakeoff size={16}/> Aeronaves à Venda</span>
-          <h1 className={styles.heroTitle}>Encontre sua próxima aeronave</h1>
-          <p className={styles.heroDesc}>Aeronaves selecionadas com procedência garantida</p>
+          <h1 className={styles.heroTitle}>{config.aeronaves_hero_titulo || 'Encontre sua próxima aeronave'}</h1>
+          <p className={styles.heroDesc}>{config.aeronaves_hero_subtitulo || 'Aeronaves selecionadas com procedência garantida'}</p>
         </div>
       </section>
       <div className="container">

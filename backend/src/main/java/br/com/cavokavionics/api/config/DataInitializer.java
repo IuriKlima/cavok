@@ -3,6 +3,7 @@ package br.com.cavokavionics.api.config;
 import br.com.cavokavionics.api.model.*;
 import br.com.cavokavionics.api.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
+
+    @Value("${admin.default.password}")
+    private String adminDefaultPassword;
 
     private final UsuarioRepository usuarioRepository;
     private final ConfiguracaoRepository configuracaoRepository;
@@ -23,7 +27,7 @@ public class DataInitializer implements CommandLineRunner {
             usuarioRepository.save(Usuario.builder()
                 .nome("Administrador")
                 .email("admin@cavokavionics.com.br")
-                .senha(passwordEncoder.encode("cavok2026"))
+                .senha(passwordEncoder.encode(adminDefaultPassword))
                 .role(Usuario.Role.ADMIN)
                 .build());
         }

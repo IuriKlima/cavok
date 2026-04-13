@@ -12,6 +12,7 @@ import Paginas from './pages/Paginas';
 import Contatos from './pages/Contatos';
 import Configuracoes from './pages/Configuracoes';
 import ImportXml from './pages/ImportXml';
+import Slides from './pages/Slides';
 
 export default function App() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
             <Route path="/paginas" element={<Paginas />} />
             <Route path="/contatos" element={<Contatos />} />
             <Route path="/configuracoes" element={<Configuracoes />} />
+            <Route path="/slides" element={<Slides />} />
             <Route path="/importar" element={<ImportXml />} />
           </Route>
         </Routes>

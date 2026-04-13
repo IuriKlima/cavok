@@ -56,7 +56,7 @@
 		<wp:term_id>45</wp:term_id>
 		<wp:term_taxonomy><![CDATA[product_cat]]></wp:term_taxonomy>
 		<wp:term_slug><![CDATA[angulo-de-ataque-pitot]]></wp:term_slug>
-		<wp:term_parent><![CDATA[]]></wp:term_parent>
+	c	<wp:term_parent><![CDATA[]]></wp:term_parent>
 		<wp:term_name><![CDATA[Ângulo de ataque/Pitot]]></wp:term_name>
 		<wp:termmeta>
 			<wp:meta_key><![CDATA[order]]></wp:meta_key>

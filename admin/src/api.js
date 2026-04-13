@@ -43,7 +43,7 @@ async function api(endpoint, options = {}) {
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: 'Erro desconhecido' }));
-    throw new Error(err.error || err.message || `Erro ${res.status}`);
+    throw new Error(err.detail || err.error || err.message || `Erro ${res.status}`);
   }
 
   return res.json();
@@ -91,11 +91,39 @@ export const getContatos = (page = 0, size = 20) => api(`/api/admin/contatos?pag
 export const marcarContatoLido = (id) => api(`/api/admin/contatos/${id}/lido`, { method: 'PUT' });
 export const deletarContato = (id) => api(`/api/admin/contatos/${id}`, { method: 'DELETE' });
 
+// Slides
+export const getSlides = () => api('/api/admin/slides');
+export const criarSlide = (data) => api('/api/admin/slides', { method: 'POST', body: JSON.stringify(data) });
+export const atualizarSlide = (id, data) => api(`/api/admin/slides/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+export const deletarSlide = (id) => api(`/api/admin/slides/${id}`, { method: 'DELETE' });
+
 // Upload
-export const uploadFiles = (files) => {
-  const formData = new FormData();
-  for (const file of files) formData.append('files', file);
-  return api('/api/admin/upload', { method: 'POST', body: formData });
+export const uploadFiles = async (files) => {
+  const IMGBB_API_KEY = import.meta.env.VITE_IMGBB_API_KEY;
+  const urls = [];
+
+  for (const file of files) {
+    const formData = new FormData();
+    formData.append('image', file);
+    
+    const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!res.ok) {
+      throw new Error('Falha na comunicação com servidor de imagens');
+    }
+    
+    const data = await res.json();
+    if (data.success) {
+      urls.push(data.data.url);
+    } else {
+      throw new Error(data.error?.message || 'Falha no upload da imagem');
+    }
+  }
+
+  return { urls };
 };
 
 // Import XML

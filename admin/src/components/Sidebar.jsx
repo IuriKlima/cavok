@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, ShoppingCart, Plane, FolderTree, FileText, MessageSquare, Settings, Download, LogOut } from 'lucide-react';
+import { LayoutDashboard, ShoppingCart, Plane, FolderTree, FileText, MessageSquare, Settings, Download, LogOut, Image } from 'lucide-react';
 import './Sidebar.css';
 
 const fullMenu = [
@@ -8,6 +8,7 @@ const fullMenu = [
   { path: '/produtos', icon: <ShoppingCart size={20}/>, label: 'Produtos' },
   { path: '/aeronaves', icon: <Plane size={20}/>, label: 'Aeronaves' },
   { path: '/categorias', icon: <FolderTree size={20}/>, label: 'Categorias' },
+  { path: '/slides', icon: <Image size={20}/>, label: 'Slides' },
   { path: '/paginas', icon: <FileText size={20}/>, label: 'Páginas' },
   { path: '/contatos', icon: <MessageSquare size={20}/>, label: 'Contatos' },
   { path: '/configuracoes', icon: <Settings size={20}/>, label: 'Configurações' },
