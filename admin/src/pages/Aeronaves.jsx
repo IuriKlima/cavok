@@ -44,7 +44,7 @@ export default function Aeronaves() {
               ) : aeronaves.map(a => (
                 <tr key={a.id}>
                   <td style={{ fontWeight: 600, color: 'var(--text)' }}>{a.nome}</td>
-                  <td>{a.anoFabricacao || '-'}</td>
+                  <td>{a.ano_fabricacao || a.anoFabricacao || '-'}</td>
                   <td>{a.categoria?.nome || '-'}</td>
                   <td><span className={`badge ${a.status === 'DISPONIVEL' ? 'badge-success' : a.status === 'VENDIDA' ? 'badge-danger' : 'badge-warning'}`}>{a.status}</span></td>
                   <td><div style={{ display: 'flex', gap: 6 }}>

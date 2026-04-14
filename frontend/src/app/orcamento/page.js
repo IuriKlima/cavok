@@ -4,14 +4,14 @@ import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
 import { useSiteData } from '@/context/SiteContext';
 import { enviarContato } from '@/lib/api';
-import { Trash2, ShoppingCart, Send, ArrowLeft, CheckCircle, Store, X, User, Mail } from 'lucide-react';
+import { Trash2, ShoppingCart, Send, ArrowLeft, CheckCircle, Store, X, User, Mail, PhoneCall } from 'lucide-react';
 import styles from './page.module.css';
 
 export default function OrcamentoPage() {
   const { cartItems, removeFromCart, clearCart, loaded } = useCart();
   const { config } = useSiteData();
   const [showPopup, setShowPopup] = useState(false);
-  const [formData, setFormData] = useState({ nome: '', email: '' });
+  const [formData, setFormData] = useState({ nome: '', telefone: '' });
 
   const handleOpenPopup = () => {
     if (cartItems.length === 0) return;
@@ -25,13 +25,13 @@ export default function OrcamentoPage() {
 
   const handleSendToWhatsApp = async (e) => {
     e.preventDefault();
-    if (!formData.nome || !formData.email) {
-      alert('Por favor, preencha nome e email.');
+    if (!formData.nome || !formData.telefone) {
+      alert('Por favor, preencha nome e telefone.');
       return;
     }
 
     const whatsappNumber = config.whatsapp || '5519983296170';
-    let message = `Olá! Meu nome é *${formData.nome}* (${formData.email}) e gostaria de um orçamento para os seguintes itens:\n\n`;
+    let message = `Olá! Meu nome é *${formData.nome}* (Tel: ${formData.telefone}) e gostaria de um orçamento para os seguintes itens:\n\n`;
 
     cartItems.forEach((item, index) => {
       message += `${index + 1}. *${item.nome}*`;
@@ -47,7 +47,8 @@ export default function OrcamentoPage() {
     try {
       await enviarContato({
         nome: formData.nome,
-        email: formData.email,
+        email: 'orcamento@whatsapp.cliente',
+        telefone: formData.telefone,
         mensagem: message,
         tipo: 'ORCAMENTO'
       });
@@ -169,16 +170,16 @@ export default function OrcamentoPage() {
                     </div>
                   </div>
                   <div className="form-group" style={{ marginTop: 24 }}>
-                    <label className={styles.modalLabel}>Seu E-mail *</label>
+                    <label className={styles.modalLabel}>Seu Telefone / WhatsApp *</label>
                     <div className={styles.modalInputWrapper}>
-                      <Mail size={18} className={styles.modalInputIcon} />
+                      <PhoneCall size={18} className={styles.modalInputIcon} />
                       <input
-                        type="email"
+                        type="tel"
                         required
                         className={styles.modalInput}
-                        placeholder="Ex: joao@email.com"
-                        value={formData.email}
-                        onChange={e => setFormData(f => ({...f, email: e.target.value}))}
+                        placeholder="Ex: (00) 00000-0000"
+                        value={formData.telefone}
+                        onChange={e => setFormData(f => ({...f, telefone: e.target.value}))}
                       />
                     </div>
                   </div>

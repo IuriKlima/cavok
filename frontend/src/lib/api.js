@@ -10,6 +10,8 @@ function mapItem(item) {
     categoriaId: item.categoria_id || null,
     marcaId: item.marca_id || null,
     imagemUrl: item.imagem_url || null,
+    anoFabricacao: item.ano_fabricacao || null,
+    horasCelula: item.horas_celula || null,
   };
 }
 
