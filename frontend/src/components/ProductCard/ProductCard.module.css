@@ -105,75 +105,88 @@
 
 /* ====== Responsive ====== */
 @media (max-width: 768px) {
+  .imageWrap {
+    aspect-ratio: 4 / 3;
+  }
+
   .image {
-    padding: 10px;
+    padding: 8px;
   }
 
   .info {
-    padding: 10px;
+    padding: 8px 10px;
   }
 
   .category {
-    font-size: 0.68rem;
-    margin-bottom: 4px;
-  }
-
-  .name {
-    font-size: 0.82rem;
+    font-size: 0.62rem;
     margin-bottom: 2px;
   }
 
+  .name {
+    font-size: 0.75rem;
+    margin-bottom: 2px;
+    -webkit-line-clamp: 2;
+  }
+
   .sku {
-    font-size: 0.7rem;
-    margin-bottom: 8px;
+    font-size: 0.65rem;
+    margin-bottom: 6px;
   }
 
   .footer {
     flex-direction: column;
     align-items: flex-start;
-    gap: 4px;
-    padding-top: 8px;
+    gap: 2px;
+    padding-top: 6px;
   }
 
   .price {
-    font-size: 0.92rem;
+    font-size: 0.82rem;
   }
 
   .consulte {
-    font-size: 0.78rem;
-  }
-
-  .cta {
     font-size: 0.72rem;
   }
 
+  .cta {
+    font-size: 0.68rem;
+  }
+
   .badge, .badgeDestaque {
-    top: 6px;
-    left: 6px;
-    font-size: 0.65rem;
-    padding: 2px 8px;
+    top: 4px;
+    left: 4px;
+    font-size: 0.58rem;
+    padding: 2px 6px;
   }
 
   .badgeDestaque {
     left: auto;
-    right: 6px;
+    right: 4px;
   }
 }
 
 @media (max-width: 480px) {
+  .imageWrap {
+    aspect-ratio: 5 / 4;
+  }
+
   .image {
-    padding: 8px;
+    padding: 6px;
   }
 
   .info {
-    padding: 8px;
+    padding: 6px 8px;
   }
 
   .name {
-    font-size: 0.76rem;
+    font-size: 0.7rem;
   }
 
   .price {
-    font-size: 0.85rem;
+    font-size: 0.78rem;
+  }
+
+  .cta {
+    font-size: 0.62rem;
   }
 }
