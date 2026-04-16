@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getDashboard } from '../api';
+import { useAuth } from '../context/AuthContext';
 import './Dashboard.css';
 
 export default function Dashboard() {
   const [data, setData] = useState({ totalProdutos: '...', totalAeronaves: '...', totalCategorias: '...', contatosNaoLidos: '...' });
+  const { user } = useAuth();
+  const isAeronavesOnly = user?.role === 'AERONAVES';
 
   useEffect(() => {
     getDashboard().then(d => { if (d) setData(d); }).catch(() => {});
@@ -15,7 +18,12 @@ export default function Dashboard() {
     { label: 'Aeronaves', value: String(data.totalAeronaves), icon: '✈️', color: 'accent', link: '/aeronaves' },
     { label: 'Categorias', value: String(data.totalCategorias), icon: '📁', color: 'success', link: '/categorias' },
     { label: 'Contatos', value: String(data.contatosNaoLidos), icon: '💬', color: 'warning', link: '/contatos' },
-  ];
+  ].filter(stat => {
+    if (isAeronavesOnly) {
+      return stat.label === 'Aeronaves' || stat.label === 'Contatos';
+    }
+    return true;
+  });
 
   return (
     <div className="dashboard">
@@ -24,7 +32,7 @@ export default function Dashboard() {
         <p className="page-subtitle">Visão geral do sistema</p>
       </div>
 
-      <div className="grid grid-4 stats-grid">
+      <div className={`grid ${isAeronavesOnly ? 'grid-2' : 'grid-4'} stats-grid`}>
         {stats.map((stat, i) => (
           <Link to={stat.link} key={i} className={`stat-card stat-${stat.color}`}>
             <div className="stat-icon">{stat.icon}</div>
@@ -40,10 +48,19 @@ export default function Dashboard() {
         <div className="card" style={{ padding: 24 }}>
           <h3 style={{ marginBottom: 16, fontSize: '1rem', fontWeight: 700 }}>Ações Rápidas</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <Link to="/produtos" className="btn btn-ghost" style={{ justifyContent: 'flex-start' }}>🛒 Gerenciar Produtos</Link>
+            {!isAeronavesOnly && (
+              <Link to="/produtos" className="btn btn-ghost" style={{ justifyContent: 'flex-start' }}>🛒 Gerenciar Produtos</Link>
+            )}
             <Link to="/aeronaves" className="btn btn-ghost" style={{ justifyContent: 'flex-start' }}>✈️ Gerenciar Aeronaves</Link>
-            <Link to="/importar" className="btn btn-ghost" style={{ justifyContent: 'flex-start' }}>📥 Importar XML WordPress</Link>
-            <Link to="/configuracoes" className="btn btn-ghost" style={{ justifyContent: 'flex-start' }}>⚙️ Configurações do Site</Link>
+            {!isAeronavesOnly && (
+              <Link to="/importar" className="btn btn-ghost" style={{ justifyContent: 'flex-start' }}>📥 Importar XML WordPress</Link>
+            )}
+            {!isAeronavesOnly && (
+              <Link to="/configuracoes-avionicos" className="btn btn-ghost" style={{ justifyContent: 'flex-start' }}>⚙️ Configurações do Site</Link>
+            )}
+            {isAeronavesOnly && (
+              <Link to="/configuracoes-aeronaves" className="btn btn-ghost" style={{ justifyContent: 'flex-start' }}>⚙️ Configurações de Aeronaves</Link>
+            )}
           </div>
         </div>
         <div className="card" style={{ padding: 24 }}>
