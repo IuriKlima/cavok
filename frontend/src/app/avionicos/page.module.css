@@ -172,8 +172,8 @@
   .contentTitle { font-size: 1.2rem; }
 
   .productsGrid {
-    grid-template-columns: 1fr;
-    gap: 16px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
 
   .pagination { gap: 8px; margin-top: 24px; }
@@ -184,8 +184,8 @@
   .contentTitle { font-size: 1rem; }
 
   .productsGrid {
-    grid-template-columns: 1fr;
-    gap: 12px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
   }
 
   .catBtn { padding: 6px 12px; font-size: 0.78rem; }
