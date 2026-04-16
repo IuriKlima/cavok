@@ -116,7 +116,7 @@
   }
 
   .productsGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px;
   }
 }
@@ -124,7 +124,7 @@
 /* Mobile */
 @media (max-width: 768px) {
   .layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 16px;
   }
 
@@ -172,7 +172,7 @@
   .contentTitle { font-size: 1.2rem; }
 
   .productsGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
   }
 
@@ -184,7 +184,7 @@
   .contentTitle { font-size: 1rem; }
 
   .productsGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
   }
 

@@ -144,18 +144,18 @@
 .ctaActions { display: flex; gap: 12px; justify-content: center; }
 
 @media (max-width: 1024px) {
-  .productsGrid { grid-template-columns: repeat(3, 1fr); }
+  .productsGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 @media (max-width: 768px) {
   .heroTitle { font-size: 1.8rem; }
   .heroActions { flex-direction: column; gap: 8px; }
-  .trustGrid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .trustGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .trustItem { padding: 12px; }
   .trustItem h3 { font-size: 0.85rem; }
   .trustItem p { font-size: 0.75rem; }
-  .productsGrid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .aircraftGrid { grid-template-columns: 1fr; }
+  .productsGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .aircraftGrid { grid-template-columns: minmax(0, 1fr); }
   .aircraftCard { flex-direction: column; }
   .aircraftImage { width: 100%; height: 200px; }
   .section { padding: 40px 0; }
@@ -167,9 +167,9 @@
 }
 
 @media (max-width: 480px) {
-  .trustGrid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .trustGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .trustItem span { font-size: 1.5rem; margin-bottom: 4px; }
-  .productsGrid { gap: 8px; }
+  .productsGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .sectionTitle { font-size: 1.1rem; }
   .aircraftInfo { padding: 14px; }
   .aircraftName { font-size: 0.95rem; }
