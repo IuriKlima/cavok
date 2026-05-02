@@ -6,7 +6,8 @@ import { notFound } from 'next/navigation';
 export const revalidate = 3600; // revalida a cada hora
 
 export async function generateMetadata({ params }) {
-  const produto = await getProduto(params.slug);
+  const resolvedParams = await params;
+  const produto = await getProduto(resolvedParams.slug);
   
   if (!produto) {
     return {
@@ -28,13 +29,14 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function ProdutoDetalhe({ params }) {
-  const produto = await getProduto(params.slug);
+  const resolvedParams = await params;
+  const produto = await getProduto(resolvedParams.slug);
   
   if (!produto) {
     notFound();
   }
 
-  const relacionados = await getProdutosRelacionados(params.slug);
+  const relacionados = await getProdutosRelacionados(resolvedParams.slug);
 
   return <ClientProduct produto={produto} relacionados={relacionados} />;
 }

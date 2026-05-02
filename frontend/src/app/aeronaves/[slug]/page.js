@@ -5,7 +5,8 @@ import { notFound } from 'next/navigation';
 export const revalidate = 3600;
 
 export async function generateMetadata({ params }) {
-  const aeronave = await getAeronave(params.slug);
+  const resolvedParams = await params;
+  const aeronave = await getAeronave(resolvedParams.slug);
   
   if (!aeronave) {
     return {
@@ -30,13 +31,14 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function AeronaveDetalhe({ params }) {
-  const aeronave = await getAeronave(params.slug);
+  const resolvedParams = await params;
+  const aeronave = await getAeronave(resolvedParams.slug);
   
   if (!aeronave) {
     notFound();
   }
 
-  const relacionadas = await getAeronavesRelacionadas(params.slug);
+  const relacionadas = await getAeronavesRelacionadas(resolvedParams.slug);
 
   return <ClientAeronave aeronave={aeronave} relacionadas={relacionadas} />;
 }
