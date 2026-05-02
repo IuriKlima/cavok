@@ -25,7 +25,7 @@ export async function generateMetadata({ params }) {
       title: titulo,
       description: desc,
       images: aeronave.imagemPrincipal ? [{ url: aeronave.imagemPrincipal, width: 800, height: 600 }] : [],
-      type: 'product',
+      type: 'website',
     },
   };
 }

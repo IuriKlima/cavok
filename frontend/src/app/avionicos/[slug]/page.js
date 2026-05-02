@@ -23,7 +23,7 @@ export async function generateMetadata({ params }) {
       title: `${produto.nome} | Cavok Avionics`,
       description: produto.descricaoCurta || `Compre ${produto.nome} na Cavok Avionics.`,
       images: produto.imagemPrincipal ? [{ url: produto.imagemPrincipal, width: 800, height: 600 }] : [],
-      type: 'product',
+      type: 'website',
     },
   };
 }
