@@ -47,7 +47,7 @@ export default function Header() {
           </div>
           <div className={styles.topContact}>
             <a href={`tel:+55${isAeronaves ? config.aeronaves_whatsapp || config.whatsapp || '19983296170' : config.whatsapp || '19983296170'}`}>
-              <Phone size={14} className={styles.iconSpaced}/> {isAeronaves ? config.aeronaves_telefone || config.telefone || '(19) 98329-6170' : config.telefone || '(19) 98329-6170'}
+              <Phone size={14} className={styles.iconSpaced}/> +55 {isAeronaves ? config.aeronaves_telefone || config.telefone || '(19) 98329-6170' : config.telefone || '(19) 98329-6170'}
             </a>
             <a href={`mailto:${isAeronaves ? config.aeronaves_email || config.email || 'orcamento@cavokavionics.com.br' : config.email || 'orcamento@cavokavionics.com.br'}`}>
               <Mail size={14} className={styles.iconSpaced}/> {isAeronaves ? config.aeronaves_email || config.email || 'orcamento@cavokavionics.com.br' : config.email || 'orcamento@cavokavionics.com.br'}

@@ -43,7 +43,7 @@ export default function ContatoPage() {
           <div className={styles.infoIcon}><Phone size={22} /></div>
           <div>
             <h3>Telefone</h3>
-            <a href={`tel:+55${config.whatsapp || '19983296170'}`}>{config.telefone || '(19) 98329-6170'}</a>
+            <a href={`tel:+55${config.whatsapp || '19983296170'}`}>+55 {config.telefone || '(19) 98329-6170'}</a>
           </div>
         </div>
         <div className={styles.infoItem}>

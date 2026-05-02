@@ -109,7 +109,7 @@ export default function SobrePage() {
             <p>Entre em contato com nossa equipe e descubra como podemos ajudar na sua próxima operação.</p>
             <div className={styles.ctaButtons}>
               <a href={`tel:+55${config.whatsapp || '19983296170'}`} className="btn btn-outline btn-lg" style={{display: 'flex', alignItems: 'center', gap: '8px', borderColor: '#fff', color: '#fff'}}>
-                <Phone size={18}/> {config.telefone || '(19) 98329-6170'}
+                <Phone size={18}/> +55 {config.telefone || '(19) 98329-6170'}
               </a>
               <a href={`https://wa.me/${config.whatsapp || '5519983296170'}`} target="_blank" rel="noopener" className="btn btn-accent btn-lg" style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
                 <MessageCircle size={18}/> Fale via WhatsApp
