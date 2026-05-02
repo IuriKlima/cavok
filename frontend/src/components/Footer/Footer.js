@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSiteData } from '@/context/SiteContext';
-import { Phone, Mail, MessageCircle } from 'lucide-react';
+import { Phone, Mail, MessageCircle, ShieldCheck } from 'lucide-react';
 import styles from './Footer.module.css';
 
 export default function Footer() {
@@ -66,7 +66,14 @@ export default function Footer() {
 
       <div className={styles.footerBottom}>
         <div className="container">
-          <p style={{marginBottom: '8px'}}>CAVOK AVIONICS INSTALACOES AERONAUTICAS LTDA - C.N.P.J.: 50.944.003/0001-51</p>
+          <p style={{marginBottom: '12px'}}>CAVOK AVIONICS INSTALACOES AERONAUTICAS LTDA - C.N.P.J.: 50.944.003/0001-51</p>
+          <div style={{marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', color: 'var(--gray-400)'}}>
+            <ShieldCheck size={32} color="var(--accent)" />
+            <div style={{textAlign: 'left', lineHeight: '1.4'}}>
+              <strong style={{display: 'block', color: 'var(--white)', fontSize: '0.9rem'}}>Certificado de Organização de Manutenção</strong>
+              <span style={{fontSize: '0.8rem'}}>Emitido pela Agência Nacional de Aviação Civil (ANAC) - <strong>COM: 202408-02/ANAC</strong></span>
+            </div>
+          </div>
           <p>© {new Date().getFullYear()} {config.site_nome || 'Cavok Avionics'}. Todos os direitos reservados.</p>
         </div>
       </div>

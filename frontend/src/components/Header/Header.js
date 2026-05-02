@@ -58,16 +58,19 @@ export default function Header() {
 
       <div className={styles.mainHeader}>
         <div className={`container ${styles.mainHeaderInner}`}>
-          <Link href="/" className={styles.logo}>
-            {logoSrc ? (
-              <img src={logoSrc} alt={config.site_nome || 'Cavok Avionics'} className={styles.logoImg} />
-            ) : (
-              <div className={styles.logoText}>
-                <span className={styles.logoName}>CAVOK</span>
-                <span className={styles.logoSub}>{isAeronaves ? 'AERONAVES' : 'AVIONICS'}</span>
-              </div>
-            )}
-          </Link>
+          <div className={styles.logoContainer}>
+            <Link href="/" className={styles.logo}>
+              {logoSrc ? (
+                <img src={logoSrc} alt={config.site_nome || 'Cavok Avionics'} className={styles.logoImg} />
+              ) : (
+                <div className={styles.logoText}>
+                  <span className={styles.logoName}>CAVOK</span>
+                  <span className={styles.logoSub}>{isAeronaves ? 'AERONAVES' : 'AVIONICS'}</span>
+                </div>
+              )}
+            </Link>
+            <span className={styles.logoCert}>COM: 202408-02/ANAC</span>
+          </div>
 
           <form className={styles.searchBar} onSubmit={handleSearch}>
             <input type="text" placeholder={isAeronaves ? "Procure por aeronaves..." : "Procure por aviônicos..."} value={searchQuery}
